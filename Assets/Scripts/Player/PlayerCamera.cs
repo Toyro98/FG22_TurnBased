@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public sealed class PlayerCamera : MonoBehaviour
@@ -13,6 +12,7 @@ public sealed class PlayerCamera : MonoBehaviour
     private void Start()
     {
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
@@ -25,7 +25,7 @@ public sealed class PlayerCamera : MonoBehaviour
         _angle -= _pitch;
         _angle = Mathf.Clamp(_angle, -90f, 90f);
 
-        // Rotate body and camera
+        // Rotates the camera and player body
         transform.localRotation = Quaternion.Euler(_angle, 0f, 0f);
         playerBody.transform.Rotate(Vector3.up * _yaw);
     }

@@ -5,14 +5,14 @@ public sealed class PlayerMovement : MonoBehaviour
 {
     private const float GRAVITY = -9.81f;
     
-    public float speed = 1f;
+    public float speed = 3f;
     public float jumpHeight = 1f;
-    public bool isGrounded = false;
+    public bool canMoveAround = false;
     
     public CharacterController controller;
     public Transform groundCheck;
     public LayerMask groundLayer;
-    public Vector3 groundDistance = new Vector3(0f, 0.5f, 0f);
+    public Vector3 groundDistance;
 
     private Vector3 _velocity;
     private Vector3 _movement;
