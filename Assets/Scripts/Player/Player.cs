@@ -5,12 +5,12 @@ public sealed class Player : MonoBehaviour, IDamageable
 {
     public new string name = "Nameless";
     public int health = 100;
-    
+
     // Used to display player's name and health
-    private Camera _mainCamera;
-    private RectTransform _canvas;
-    private TMP_Text _nameText;
-    private TMP_Text _healthText;
+    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private RectTransform _canvas;
+    public TMP_Text nameText;
+    public TMP_Text healthText;
 
     private void Start()
     {
@@ -18,11 +18,8 @@ public sealed class Player : MonoBehaviour, IDamageable
         _canvas = GetComponentInChildren<RectTransform>();
 
         TMP_Text[] texts = _canvas.GetComponentsInChildren<TMP_Text>();
-        _nameText = texts[0];
-        _healthText = texts[1];
-        
-        _nameText.text = name;
-        _healthText.text = health.ToString();
+        nameText = texts[0];
+        healthText = texts[1];
     }
 
     public void Update()
@@ -30,19 +27,27 @@ public sealed class Player : MonoBehaviour, IDamageable
         // Look at the main camera
         Quaternion rotation = _mainCamera.transform.rotation;
         _canvas.LookAt(_canvas.transform.position + rotation * Vector3.forward, rotation * Vector3.up);
-        
+
         // Temp
         if (Input.GetKeyDown(KeyCode.T))
         {
             TakeDamage(Random.Range(1, 17));
         }
     }
-    
+
     public void TakeDamage(int amount)
     {
         health -= amount;
-        _healthText.text = health.ToString();
-        
-        // Todo: Display how much damage you took and then have text move up and fade away
+
+        if (health <= 0)
+        {
+            GameManager.Instance.UpdateGameState(GameState.GameOver);
+        }
+        else
+        {
+            healthText.text = health.ToString();
+
+            // Todo: Display how much damage you took and then have text move up and fade away
+        }
     }
 }

@@ -6,6 +6,9 @@ public sealed class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     private GameState _state;
     
+    public static event GameStateChange OnGameStateChange;
+    public delegate void GameStateChange(GameState state);
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -16,9 +19,10 @@ public sealed class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    private void Update()
     {
-        UpdateGameState(GameState.Start);
+        if (Input.GetKeyDown(KeyCode.V))
+            UpdateGameState(GameState.Start);
     }
 
     public void UpdateGameState(GameState state)
@@ -42,11 +46,13 @@ public sealed class GameManager : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
+        
+        OnGameStateChange?.Invoke(_state);
     }
 
     private void HandleGameStart()
     {
-        // TODO
+        PlayerManager.Instance.CreatePlayers(2);
     }
     
     private void HandlePlayerTurn()
