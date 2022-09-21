@@ -5,7 +5,6 @@ public sealed class PlayerCamera : MonoBehaviour
     public float sensitivity = 2f;
     private float _yaw;
     private float _pitch;
-    private float _roll;
     private float _angle = 0f;
     public Transform playerBody;
 
