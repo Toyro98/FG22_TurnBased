@@ -68,6 +68,9 @@ public sealed class GameManager : MonoBehaviour
     private void HandleGameOver()
     {
         // TODO
+        PlayerManager.Instance.DisableAllPlayerInputs();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }
 
