@@ -3,49 +3,9 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public static PlayerManager Instance { get; private set; }
     public Player playerPrefab;
     public List<Player> playerList;
-    public bool test = false;
-    
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-
-        Instance = this;
-    }
-
-    public void CreatePlayers(int amount)
-    {
-        for (int i = 0; i < playerList.Count; i++)
-        {
-            Destroy(playerList[i].gameObject);
-        }
-
-        playerList.Clear();
-
-        for (int i = 0; i < amount; i++)
-        {
-            Player player = Instantiate(playerPrefab, new Vector3(Random.Range(9f, -9f), 0.5f, Random.Range(9f, -9f)),
-                Quaternion.identity);
-
-            playerList.Add(player);
-
-            if (i == 0)
-            {
-                player.GetComponent<PlayerMovement>().enabled = true;
-                var camera = player.GetComponentInChildren<PlayerCamera>();
-
-                camera.GetComponent<Camera>().enabled = true;
-                camera.enabled = true;
-            }
-        }
-        
-        // GameManager.Instance.UpdateGameState(GameState.PlayerTurn);
-    }
+    public int activePlayerIndex = 0;
 
     private void Update()
     {
@@ -55,31 +15,51 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void CreatePlayers(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            Player player = Instantiate(playerPrefab, new Vector3(Random.Range(19f, -19f), 0.5f, Random.Range(19f, -19f)),
+                Quaternion.identity);
+
+            player.name = "Player " + (i + 1);
+
+            playerList.Add(player);
+
+            if (i == activePlayerIndex)
+            {
+                player.Toggle();
+            }
+
+            // player.mesh.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+        }
+        
+        // GameManager.Instance.UpdateGameState(GameState.PlayerTurn);
+    }
+
     public void SwitchPlayer()
     {
-        for (int i = 0; i < playerList.Count; i++)
-        {
-            var playerMovement = playerList[i].GetComponent<PlayerMovement>();
-            var playerCamera = playerList[i].GetComponentInChildren<PlayerCamera>();
-            var camera = playerCamera.GetComponent<Camera>();
+        // Turn off playermovement, camera, and etc for current active player index and then increase the index
+        playerList[activePlayerIndex++].Toggle();
 
-            playerMovement.enabled = !playerMovement.enabled;
-            camera.enabled = !camera.enabled;
-            playerCamera.enabled = !playerCamera.enabled;
-        }
+        activePlayerIndex %= playerList.Count;
+
+        playerList[activePlayerIndex].Toggle();
     }
 
     public void DisableAllPlayerInputs()
     {
         for (int i = 0; i < playerList.Count; i++)
         {
+            Destroy(playerList[i].gameObject);
+            /*
             playerList[i].GetComponent<PlayerMovement>().enabled = false;
 
             var playerCamera = playerList[i].GetComponentInChildren<PlayerCamera>();
             var camera = playerCamera.GetComponent<Camera>();
 
             camera.enabled = false;
-            playerCamera.enabled = false;
+            playerCamera.enabled = false;*/
         }
     }
 }
