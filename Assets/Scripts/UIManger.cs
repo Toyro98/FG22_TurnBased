@@ -5,20 +5,8 @@ using TMPro;
 
 public class UIManger : MonoBehaviour
 {
-    public static UIManger Instance { get; private set; }
-
     [SerializeField] private GameObject _gameoverScreen;
     [SerializeField] private TMP_Text _timer;
-    
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-
-        Instance = this;
-    }
 
     private void OnEnable()
     {
