@@ -308,7 +308,7 @@ MonoBehaviour:
   m_text: Play Again
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -698,7 +698,7 @@ GameObject:
   - component: {fileID: 651606590}
   m_Layer: 0
   m_Name: MainCamera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -762,7 +762,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 651606589}
   m_LocalRotation: {x: -0.10629862, y: 0.41772926, z: -0.048991658, w: -0.901001}
-  m_LocalPosition: {x: 13.768291, y: 5.642544, z: -11.746772}
+  m_LocalPosition: {x: 19.768291, y: 2.3925438, z: -20.996773}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1194,7 +1194,6 @@ GameObject:
   - component: {fileID: 1281553297}
   - component: {fileID: 1281553296}
   - component: {fileID: 1281553295}
-  - component: {fileID: 1281553294}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1202,20 +1201,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1281553294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1281553293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 003eb7d444f2e4b428e1495bc910eb30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _gameoverScreen: {fileID: 1495064437}
-  _timer: {fileID: 507185193}
 --- !u!114 &1281553295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1451,9 +1436,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1281553294}
+      - m_Target: {fileID: 1839681779}
         m_TargetAssemblyTypeName: UIManger, Assembly-CSharp
-        m_MethodName: StartNewGame
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1683,6 +1668,7 @@ GameObject:
   - component: {fileID: 1839681781}
   - component: {fileID: 1839681783}
   - component: {fileID: 1839681784}
+  - component: {fileID: 1839681785}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1717,6 +1703,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19f4f1455590f9644a7d744c4f18f4f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerManager: {fileID: 0}
+  _uiManger: {fileID: 0}
 --- !u!114 &1839681784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1731,7 +1719,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8844675230408794019, guid: c5ded412322232542aa92e53c0f531d7, type: 3}
   playerList: []
-  test: 0
+  activePlayerIndex: 0
+--- !u!114 &1839681785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839681779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 003eb7d444f2e4b428e1495bc910eb30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameoverScreen: {fileID: 1495064437}
+  _timer: {fileID: 507185193}
 --- !u!1 &1840664434
 GameObject:
   m_ObjectHideFlags: 0
@@ -1824,7 +1826,7 @@ Transform:
   m_GameObject: {fileID: 1840664434}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 2}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1896920500}

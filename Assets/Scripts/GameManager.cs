@@ -9,6 +9,10 @@ public sealed class GameManager : MonoBehaviour
     public static event GameStateChange OnGameStateChange;
     public delegate void GameStateChange(GameState state);
 
+    // Managers
+    [SerializeField] private PlayerManager _playerManager;
+    [SerializeField] private UIManger _uiManger;
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -17,6 +21,12 @@ public sealed class GameManager : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    private void Start()
+    {
+        _playerManager = GetComponent<PlayerManager>();   
+        _uiManger = GetComponent<UIManger>();
     }
 
     private void Update()
@@ -52,7 +62,10 @@ public sealed class GameManager : MonoBehaviour
 
     private void HandleGameStart()
     {
-        PlayerManager.Instance.CreatePlayers(2);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        _playerManager.CreatePlayers(2);
     }
     
     private void HandlePlayerTurn()
@@ -68,7 +81,7 @@ public sealed class GameManager : MonoBehaviour
     private void HandleGameOver()
     {
         // TODO
-        PlayerManager.Instance.DisableAllPlayerInputs();
+        _playerManager.DisableAllPlayerInputs();
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
