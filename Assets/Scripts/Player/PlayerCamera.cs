@@ -8,10 +8,14 @@ public sealed class PlayerCamera : MonoBehaviour
     private float _angle = 0f;
     public Transform playerBody;
 
-    private void Start()
+    public void OnEnable()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        this.tag = "MainCamera";
+    }
+
+    public void OnDisable()
+    {
+        this.tag = "Untagged";
     }
 
     private void Update()
