@@ -65,7 +65,7 @@ public sealed class GameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        _playerManager.CreatePlayers(2);
+        _playerManager.CreatePlayers(6);
     }
     
     private void HandlePlayerTurn()
@@ -81,7 +81,7 @@ public sealed class GameManager : MonoBehaviour
     private void HandleGameOver()
     {
         // TODO
-        _playerManager.DisableAllPlayerInputs();
+        _playerManager.DestroyAllPlayers();
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }

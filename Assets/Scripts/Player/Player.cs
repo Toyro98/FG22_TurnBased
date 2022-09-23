@@ -7,7 +7,7 @@ public sealed class Player : MonoBehaviour, IDamageable
     public int health = 100;
 
     [Header("UI")]
-    [SerializeField] private Camera _mainCamera;
+    [SerializeField] private Camera _cameraLookAt;
     [SerializeField] private Canvas _canvas;
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _healthText;
@@ -20,21 +20,13 @@ public sealed class Player : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        _mainCamera = Camera.main;
-        _canvas = GetComponentInChildren<Canvas>();
-
-        TextMeshProUGUI[] texts = _canvas.GetComponentsInChildren<TextMeshProUGUI>();
-        _nameText = texts[0];
-        _healthText = texts[1];
-
         _nameText.text = name;
         _healthText.text = health.ToString();
     }
 
     public void Update()
     {
-        // Look at the main camera
-        Quaternion rotation = Camera.main.transform.rotation;
+        Quaternion rotation = _cameraLookAt.transform.rotation;
         _canvas.transform.LookAt(_canvas.transform.position + rotation * Vector3.forward, rotation * Vector3.up);
 
         // Temp
@@ -48,7 +40,7 @@ public sealed class Player : MonoBehaviour, IDamageable
     {
         health -= amount;
 
-        if (health <= 0)
+        if (health < 1)
         {
             GameManager.Instance.UpdateGameState(GameState.GameOver);
         }
@@ -62,11 +54,18 @@ public sealed class Player : MonoBehaviour, IDamageable
 
     public void Toggle()
     {
+        // Hides the canvas above the active player but show the canvas above other players
         _canvas.enabled = !_canvas.enabled;
 
-        _playerMovement.enabled = !_playerMovement.enabled;
+        _playerMovement.canMoveAround = !_playerMovement.canMoveAround;
+
         _playerCameraScript.enabled = !_playerCameraScript.enabled;
         _playerCamera.enabled = !_playerCamera.enabled;
         _playerMesh.enabled = !_playerMesh.enabled;
+    }
+
+    public void SetCamera(Camera newCamera)
+    {
+        _cameraLookAt = newCamera;
     }
 }

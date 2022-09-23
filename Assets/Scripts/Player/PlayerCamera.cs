@@ -2,21 +2,12 @@ using UnityEngine;
 
 public sealed class PlayerCamera : MonoBehaviour
 {
+    public Transform playerBody;
     public float sensitivity = 2f;
+
     private float _yaw;
     private float _pitch;
     private float _angle = 0f;
-    public Transform playerBody;
-
-    public void OnEnable()
-    {
-        this.tag = "MainCamera";
-    }
-
-    public void OnDisable()
-    {
-        this.tag = "Untagged";
-    }
 
     private void Update()
     {

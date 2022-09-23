@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviour
     public Player playerPrefab;
     public List<Player> playerList;
     public int activePlayerIndex = 0;
+    public Camera activeCamera;
 
     private void Update()
     {
@@ -19,19 +20,25 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 0; i < amount; i++)
         {
-            Player player = Instantiate(playerPrefab, new Vector3(Random.Range(19f, -19f), 0.5f, Random.Range(19f, -19f)),
-                Quaternion.identity);
-
+            // Instantiate player and set its name
+            Player player = Instantiate(playerPrefab, new Vector3(Random.Range(19f, -19f), 0.5f, Random.Range(19f, -19f)), Quaternion.identity);
             player.name = "Player " + (i + 1);
 
+            // Add the player to a list
             playerList.Add(player);
 
-            if (i == activePlayerIndex)
+            // Active movement and camera for the first player and set the activeCamera 
+            if (activePlayerIndex == i)
             {
                 player.Toggle();
+                activeCamera = player.GetComponentInChildren<Camera>();
+            }
+            else
+            {
+                player.SetCamera(activeCamera);
             }
 
-            // player.mesh.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            player.GetComponent<MeshRenderer>().material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
         }
         
         // GameManager.Instance.UpdateGameState(GameState.PlayerTurn);
@@ -45,21 +52,29 @@ public class PlayerManager : MonoBehaviour
         activePlayerIndex %= playerList.Count;
 
         playerList[activePlayerIndex].Toggle();
+        UpdateCameraLookAt();
     }
 
-    public void DisableAllPlayerInputs()
+    private void UpdateCameraLookAt()
+    {
+        activeCamera = playerList[activePlayerIndex].GetComponentInChildren<Camera>();
+
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            if (activePlayerIndex != i)
+            {
+                playerList[i].SetCamera(activeCamera);
+            }
+        }
+    }
+
+    public void DestroyAllPlayers()
     {
         for (int i = 0; i < playerList.Count; i++)
         {
             Destroy(playerList[i].gameObject);
-            /*
-            playerList[i].GetComponent<PlayerMovement>().enabled = false;
-
-            var playerCamera = playerList[i].GetComponentInChildren<PlayerCamera>();
-            var camera = playerCamera.GetComponent<Camera>();
-
-            camera.enabled = false;
-            playerCamera.enabled = false;*/
         }
+
+        playerList.Clear();
     }
 }
