@@ -31,8 +31,17 @@ public sealed class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // TODO: Activate it through a mainmenu
         if (Input.GetKeyDown(KeyCode.V))
+        {
             UpdateGameState(GameState.Start);
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            _playerManager.SwitchPlayer();
+            _playerManager.UpdateCameraLookAt();
+        }
     }
 
     public void UpdateGameState(GameState state)
@@ -68,6 +77,8 @@ public sealed class GameManager : MonoBehaviour
     private void HandlePlayerTurn()
     {
         // TODO
+        _playerManager.SwitchPlayer();
+        _playerManager.UpdateCameraLookAt();
     }
 
     private void HandleGameOver()

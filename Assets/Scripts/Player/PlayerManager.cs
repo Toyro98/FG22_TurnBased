@@ -1,19 +1,18 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
+    private UIManger uiManger;
     public Player playerPrefab;
     public List<Player> playerList;
     public int activePlayerIndex = 0;
     public Camera activeCamera;
 
-    private void Update()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            SwitchPlayer();
-        }
+        uiManger = GetComponent<UIManger>();
     }
 
     public void CreatePlayers(int amount)
@@ -27,7 +26,7 @@ public class PlayerManager : MonoBehaviour
             // Add the player to a list
             playerList.Add(player);
 
-            // Active movement and camera for the first player and set the activeCamera 
+            // ACtivate movement and camera for the first player
             if (activePlayerIndex == i)
             {
                 player.Toggle();
@@ -38,7 +37,7 @@ public class PlayerManager : MonoBehaviour
                 player.SetCamera(activeCamera);
             }
 
-            player.GetComponent<MeshRenderer>().material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            player.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
         }
         
         // GameManager.Instance.UpdateGameState(GameState.PlayerTurn);
@@ -46,16 +45,17 @@ public class PlayerManager : MonoBehaviour
 
     public void SwitchPlayer()
     {
+        StopAllCoroutines();
+
         // Turn off playermovement, camera, and etc for current active player index and then increase the index
         playerList[activePlayerIndex++].Toggle();
 
         activePlayerIndex %= playerList.Count;
 
         playerList[activePlayerIndex].Toggle();
-        UpdateCameraLookAt();
     }
 
-    private void UpdateCameraLookAt()
+    public void UpdateCameraLookAt()
     {
         activeCamera = playerList[activePlayerIndex].GetComponentInChildren<Camera>();
 
@@ -66,6 +66,8 @@ public class PlayerManager : MonoBehaviour
                 playerList[i].SetCamera(activeCamera);
             }
         }
+
+        StartCoroutine(Timer(45));
     }
 
     public void DestroyAllPlayers()
@@ -76,5 +78,28 @@ public class PlayerManager : MonoBehaviour
         }
 
         playerList.Clear();
+    }
+
+    public IEnumerator Timer(int time)
+    {
+        WaitForSeconds delay = new WaitForSeconds(1f);
+        uiManger.playerTimerScreen.SetActive(true);
+
+        while (time > -1)
+        {
+            var timeSpan = System.TimeSpan.FromSeconds(time);
+
+            uiManger.playerTimer.text = string.Format("{0:D2}", timeSpan.Seconds);
+
+            yield return delay;
+
+            time--;
+        }
+
+        uiManger.playerTimerScreen.SetActive(false);
+
+        // Once timer reached 0, we switch player
+        SwitchPlayer();
+        UpdateCameraLookAt();
     }
 }

@@ -5,8 +5,11 @@ using TMPro;
 
 public class UIManger : MonoBehaviour
 {
+    [SerializeField] private GameObject _crosshair;
     [SerializeField] private GameObject _gameoverScreen;
     [SerializeField] private TMP_Text _timer;
+    public GameObject playerTimerScreen;
+    public TMP_Text playerTimer;
 
     private void OnEnable()
     {
@@ -16,11 +19,6 @@ public class UIManger : MonoBehaviour
     private void OnDisable()
     {
         GameManager.OnGameStateChange -= Time;
-    }
-    
-    public void StartNewGame()
-    {
-        GameManager.Instance.UpdateGameState(GameState.Start);
     }
 
     private void Time(GameState state)

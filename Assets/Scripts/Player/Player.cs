@@ -28,19 +28,13 @@ public sealed class Player : MonoBehaviour, IDamageable
     {
         Quaternion rotation = _cameraLookAt.transform.rotation;
         _canvas.transform.LookAt(_canvas.transform.position + rotation * Vector3.forward, rotation * Vector3.up);
-
-        // Temp
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TakeDamage(Random.Range(1, 17));
-        }
     }
 
     public void TakeDamage(int amount)
     {
         health -= amount;
 
-        if (health < 1)
+        if (health <= 0)
         {
             GameManager.Instance.UpdateGameState(GameState.GameOver);
         }
