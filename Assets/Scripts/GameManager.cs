@@ -47,9 +47,6 @@ public sealed class GameManager : MonoBehaviour
             case GameState.PlayerTurn:
                 HandlePlayerTurn();
                 break;
-            case GameState.RandomDrop:
-                HandleRandomDrop();
-                break;
             case GameState.GameOver:
                 HandleGameOver();
                 break;
@@ -73,11 +70,6 @@ public sealed class GameManager : MonoBehaviour
         // TODO
     }
 
-    private void HandleRandomDrop()
-    {
-        // TODO
-    }
-
     private void HandleGameOver()
     {
         // TODO
@@ -91,6 +83,5 @@ public enum GameState
 {
     Start,
     PlayerTurn,
-    RandomDrop,
     GameOver
 }
