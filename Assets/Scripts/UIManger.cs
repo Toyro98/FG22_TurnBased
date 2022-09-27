@@ -3,13 +3,16 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-public class UIManger : MonoBehaviour
+public sealed class UIManger : MonoBehaviour
 {
     [SerializeField] private GameObject _crosshair;
     [SerializeField] private GameObject _gameoverScreen;
     [SerializeField] private TMP_Text _timer;
+
     public GameObject playerTimerScreen;
     public TMP_Text playerTimer;
+
+    public TMP_Text playerHealth;
 
     private void OnEnable()
     {
@@ -38,7 +41,7 @@ public class UIManger : MonoBehaviour
     IEnumerator Timer()
     {
         // Temp
-        int time = 60 * 25;
+        int time = 60 * 45;
         WaitForSeconds delay = new WaitForSeconds(1f);
         
         while (time > -1)
