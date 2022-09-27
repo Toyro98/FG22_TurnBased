@@ -5,7 +5,7 @@ public sealed class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     private GameState _state;
-    
+
     public static event GameStateChange OnGameStateChange;
     public delegate void GameStateChange(GameState state);
 
@@ -31,16 +31,9 @@ public sealed class GameManager : MonoBehaviour
 
     private void Update()
     {
-        // TODO: Activate it through a mainmenu
         if (Input.GetKeyDown(KeyCode.V))
         {
             UpdateGameState(GameState.Start);
-        }
-
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            _playerManager.SwitchPlayer();
-            _playerManager.UpdateCameraLookAt();
         }
     }
 
@@ -55,6 +48,9 @@ public sealed class GameManager : MonoBehaviour
                 break;
             case GameState.PlayerTurn:
                 HandlePlayerTurn();
+                break;
+            case GameState.Test:
+                HandleTest();
                 break;
             case GameState.GameOver:
                 HandleGameOver();
@@ -71,14 +67,17 @@ public sealed class GameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        _playerManager.CreatePlayers(6);
+        Debug.Log("<< New Game has started! Creating Players >>");
     }
     
     private void HandlePlayerTurn()
     {
-        // TODO
-        _playerManager.SwitchPlayer();
-        _playerManager.UpdateCameraLookAt();
+        Debug.Log("<< GameState has changed to Player's Turn >>");
+    }
+
+    private void HandleTest()
+    {
+
     }
 
     private void HandleGameOver()
@@ -94,5 +93,6 @@ public enum GameState
 {
     Start,
     PlayerTurn,
+    Test,
     GameOver
 }
