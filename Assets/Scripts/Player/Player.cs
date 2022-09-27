@@ -3,8 +3,10 @@ using TMPro;
 
 public sealed class Player : MonoBehaviour, IDamageable
 {
+    public PlayerManager playerManager;
     public new string name = "Name";
     public int health = 100;
+    public int index = 0;
 
     [Header("UI")]
     [SerializeField] private Camera _cameraLookAt;
@@ -26,33 +28,44 @@ public sealed class Player : MonoBehaviour, IDamageable
 
     public void Update()
     {
-        Quaternion rotation = _cameraLookAt.transform.rotation;
-        _canvas.transform.LookAt(_canvas.transform.position + rotation * Vector3.forward, rotation * Vector3.up);
+        if (_cameraLookAt != null)
+        {
+            Quaternion rotation = _cameraLookAt.transform.rotation;
+            _canvas.transform.LookAt(_canvas.transform.position + rotation * Vector3.forward, rotation * Vector3.up);
+        }
+        else
+        {
+            _cameraLookAt = Camera.main;
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            TakeDamage(Random.Range(1, 51));
+        }
     }
 
     public void TakeDamage(int amount)
     {
         health -= amount;
+        _healthText.text = health.ToString();
 
+        // Todo: Display how much damage you took and then have text move up and fade away
         if (health <= 0)
         {
-            GameManager.Instance.UpdateGameState(GameState.GameOver);
-        }
-        else
-        {
-            _healthText.text = health.ToString();
-
-            // Todo: Display how much damage you took and then have text move up and fade away
+            playerManager.RemovePlayer(index);
+            Destroy(gameObject);
         }
     }
 
     public void Toggle()
     {
-        // Hides the canvas above the active player but show the canvas above other players
+        // Hides the canvas above the active player but shows the canvas above other players
         _canvas.enabled = !_canvas.enabled;
 
+        // Instead of toggling on and off the script, we change a variable so the player can fall down if they jumped before the switch
         _playerMovement.canMoveAround = !_playerMovement.canMoveAround;
 
+        // Toggle on or off scripts and player's mesh
         _playerCameraScript.enabled = !_playerCameraScript.enabled;
         _playerCamera.enabled = !_playerCamera.enabled;
         _playerMesh.enabled = !_playerMesh.enabled;
