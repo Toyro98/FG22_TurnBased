@@ -4,17 +4,15 @@ using UnityEngine;
 
 public sealed class PlayerManager : MonoBehaviour
 {
-    private UIManger uiManger;
+    [SerializeField] private UIManger _uiManger;
+    [SerializeField] private Rocket _rocketPrefab;
+
     public Player playerPrefab;
     public List<Player> playerList;
     public int activePlayerIndex = 0;
     public Camera activeCamera;
     private bool gameJustStarted;
-
-    private void Start()
-    {
-        uiManger = GetComponent<UIManger>();
-    }
+    private GameState _gameState;
 
     private void OnEnable()
     {
@@ -26,11 +24,34 @@ public sealed class PlayerManager : MonoBehaviour
         GameManager.OnGameStateChange -= Test;
     }
 
+    private void Update()
+    {
+        if (_gameState != GameState.PlayerTurn)
+        {
+            return;
+        }
+
+        // Left Click
+        if (Input.GetButtonDown("Fire1"))
+        {
+            Transform tr = playerList[activePlayerIndex].GetPlayerCameraTransform();
+            Instantiate(_rocketPrefab, tr.transform.position, tr.transform.rotation, null);
+        }
+
+        // Right Click
+        if (Input.GetButtonDown("Fire2"))
+        {
+            Debug.Log("grenade todo");
+        }
+    }
+
     private void Test(GameState state)
     {
+        _gameState = state;
+
         if (state == GameState.Start)
         {
-            CreatePlayers(4);
+            CreatePlayers(8);
             gameJustStarted = true;
 
             GameManager.Instance.UpdateGameState(GameState.PlayerTurn);
@@ -47,18 +68,25 @@ public sealed class PlayerManager : MonoBehaviour
             if (gameJustStarted)
             {
                 gameJustStarted = false;
-                StartCoroutine(StartTimer(5));
+                StartCoroutine(StartTimer(50));
                 return;
             }
 
             SwitchPlayer();
             UpdateCameraLookAt();
-            StartCoroutine(StartTimer(5));
+            StartCoroutine(StartTimer(50));
         }
     }
 
     public void CreatePlayers(int amount)
     {
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            Destroy(playerList[i]);
+        }
+
+        playerList.Clear();
+
         for (int i = 0; i < amount; i++)
         {
             // Instantiate player and set its name
@@ -139,33 +167,28 @@ public sealed class PlayerManager : MonoBehaviour
         }
     }
 
-    public void DestroyAllPlayers()
+    public string GetActivePlayerHealth()
     {
-        for (int i = 0; i < playerList.Count; i++)
-        {
-            Destroy(playerList[i]);
-        }
-
-        playerList.Clear();
+        return playerList[activePlayerIndex].health.ToString();
     }
 
-    private IEnumerator StartTimer(int time)
+    private IEnumerator StartTimer(int seconds)
     {
         WaitForSeconds delay = new WaitForSeconds(1f);
-        uiManger.playerTimerScreen.SetActive(true);
+        _uiManger.SetPlayerTimer("", true);
 
-        while (time > -1)
+        while (seconds > -1)
         {
-            var timeSpan = System.TimeSpan.FromSeconds(time);
+            var timeSpan = System.TimeSpan.FromSeconds(seconds);
 
-            uiManger.playerTimer.text = string.Format("{0:D2}", timeSpan.Seconds);
+            _uiManger.SetPlayerTimer(string.Format("{0:D2}", timeSpan.Seconds));
 
             yield return delay;
 
-            time--;
+            seconds--;
         }
 
-        uiManger.playerTimerScreen.SetActive(false);
+        _uiManger.SetPlayerTimer("", false);
 
         // Once timer reached 0, we switch player
         StopAllCoroutines();

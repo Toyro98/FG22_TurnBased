@@ -9,9 +9,7 @@ public sealed class GameManager : MonoBehaviour
     public static event GameStateChange OnGameStateChange;
     public delegate void GameStateChange(GameState state);
 
-    // Managers
-    [SerializeField] private PlayerManager _playerManager;
-    [SerializeField] private UIManger _uiManger;
+    private PlayerManager _playerManager;
     
     private void Awake()
     {
@@ -26,7 +24,6 @@ public sealed class GameManager : MonoBehaviour
     private void Start()
     {
         _playerManager = GetComponent<PlayerManager>();   
-        _uiManger = GetComponent<UIManger>();
     }
 
     private void Update()
@@ -82,10 +79,10 @@ public sealed class GameManager : MonoBehaviour
 
     private void HandleGameOver()
     {
-        // TODO
-        _playerManager.DestroyAllPlayers();
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+     
+        Debug.Log("<< Game Over >>");
     }
 }
 
