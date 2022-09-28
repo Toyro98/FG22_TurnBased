@@ -26,7 +26,7 @@ public sealed class Player : MonoBehaviour, IDamageable
         _healthText.text = health.ToString();
     }
 
-    public void Update()
+    private void Update()
     {
         if (_cameraLookAt != null)
         {
@@ -36,24 +36,6 @@ public sealed class Player : MonoBehaviour, IDamageable
         else
         {
             _cameraLookAt = Camera.main;
-        }
-
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TakeDamage(Random.Range(1, 51));
-        }
-    }
-
-    public void TakeDamage(int amount)
-    {
-        health -= amount;
-        _healthText.text = health.ToString();
-
-        // Todo: Display how much damage you took and then have text move up and fade away
-        if (health <= 0)
-        {
-            playerManager.RemovePlayer(index);
-            Destroy(gameObject);
         }
     }
 
@@ -74,5 +56,23 @@ public sealed class Player : MonoBehaviour, IDamageable
     public void SetCamera(Camera newCamera)
     {
         _cameraLookAt = newCamera;
+    }
+
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+        _healthText.text = health.ToString();
+
+        // Todo: Display how much damage you took and then have text move up and fade away
+        if (health <= 0)
+        {
+            playerManager.RemovePlayer(index);
+            Destroy(gameObject);
+        }
+    }
+
+    public Transform GetPlayerCameraTransform()
+    {
+        return _playerCamera.transform;
     }
 }
