@@ -9,6 +9,10 @@ public class LevelManager : MonoBehaviour
     {
         SceneManager.LoadScene(0);
     }
+    public void RestartLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
     public void StartLevel()
     {
