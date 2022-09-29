@@ -11,17 +11,16 @@ public sealed class PlayerManager : MonoBehaviour
     public List<Player> playerList;
     public int activePlayerIndex = 0;
     public Camera activeCamera;
-    private bool gameJustStarted;
     private GameState _gameState;
 
     private void OnEnable()
     {
-        GameManager.OnGameStateChange += Test;
+        GameManager.OnGameStateChange += GameStateChange;
     }
 
     private void OnDisable()
     {
-        GameManager.OnGameStateChange -= Test;
+        GameManager.OnGameStateChange -= GameStateChange;
     }
 
     private void Update()
@@ -41,44 +40,24 @@ public sealed class PlayerManager : MonoBehaviour
         // Right Click
         if (Input.GetButtonDown("Fire2"))
         {
-            Debug.Log("grenade todo");
+            Debug.Log("todo");
         }
     }
 
-    private void Test(GameState state)
+    private void GameStateChange(GameState state)
     {
         _gameState = state;
 
-        if (state == GameState.Start)
+        if (state == GameState.PlayerSwitch)
         {
-            CreatePlayers(8);
-            gameJustStarted = true;
+            SwitchPlayer();
+            UpdateCameraLookAt();
 
             GameManager.Instance.UpdateGameState(GameState.PlayerTurn);
         }
-        else if (state == GameState.GameOver)
-        {
-            StopAllCoroutines();
-        }
-        else if (state == GameState.PlayerTurn)
-        {
-            // If the game has just started, start the timer only
-            // When all players were created we set the first player to being able to move around and made all canvas look at active player
-            // Without the variable, we would switch directly to the second player
-            if (gameJustStarted)
-            {
-                gameJustStarted = false;
-                StartCoroutine(StartTimer(50));
-                return;
-            }
-
-            SwitchPlayer();
-            UpdateCameraLookAt();
-            StartCoroutine(StartTimer(50));
-        }
     }
 
-    public void CreatePlayers(int amount)
+    public void CreatePlayers()
     {
         for (int i = 0; i < playerList.Count; i++)
         {
@@ -87,7 +66,7 @@ public sealed class PlayerManager : MonoBehaviour
 
         playerList.Clear();
 
-        for (int i = 0; i < amount; i++)
+        for (int i = 0; i < GameManager.Instance.GameSettings.players; i++)
         {
             // Instantiate player and set its name
             Player player = Instantiate(playerPrefab, new Vector3(Random.Range(19f, -19f), 0.5f, Random.Range(19f, -19f)), Quaternion.identity);
@@ -165,33 +144,14 @@ public sealed class PlayerManager : MonoBehaviour
         {
             GameManager.Instance.UpdateGameState(GameState.GameOver);
         }
+        else
+        {
+            GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
+        }
     }
 
     public string GetActivePlayerHealth()
     {
         return playerList[activePlayerIndex].health.ToString();
-    }
-
-    private IEnumerator StartTimer(int seconds)
-    {
-        WaitForSeconds delay = new WaitForSeconds(1f);
-        _uiManger.SetPlayerTimer("", true);
-
-        while (seconds > -1)
-        {
-            var timeSpan = System.TimeSpan.FromSeconds(seconds);
-
-            _uiManger.SetPlayerTimer(string.Format("{0:D2}", timeSpan.Seconds));
-
-            yield return delay;
-
-            seconds--;
-        }
-
-        _uiManger.SetPlayerTimer("", false);
-
-        // Once timer reached 0, we switch player
-        StopAllCoroutines();
-        GameManager.Instance.UpdateGameState(GameState.Test);
     }
 }
