@@ -66,13 +66,17 @@ public sealed class PlayerManager : MonoBehaviour
 
         playerList.Clear();
 
-        for (int i = 0; i < GameManager.Instance.GameSettings.players; i++)
+        int players = GameManager.Instance.GameSettings.players;
+        int health = GameManager.Instance.GameSettings.playerHealth;
+
+        for (int i = 0; i < players; i++)
         {
             // Instantiate player and set its name
             Player player = Instantiate(playerPrefab, new Vector3(Random.Range(19f, -19f), 0.5f, Random.Range(19f, -19f)), Quaternion.identity);
 
             player.name = "Player " + (i + 1);
             player.index = i;
+            player.health = health;
             player.playerManager = this;
 
             // Add the player to a list
@@ -148,6 +152,11 @@ public sealed class PlayerManager : MonoBehaviour
         {
             GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
         }
+    }
+
+    public string GetActivePlayerName()
+    {
+        return playerList[activePlayerIndex].name;
     }
 
     public string GetActivePlayerHealth()
