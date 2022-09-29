@@ -14,9 +14,8 @@ public sealed class UIManger : MonoBehaviour
     [SerializeField] private TMP_Text _playerTimer;
     [SerializeField] private GameObject _playerHealthScreen;
     [SerializeField] private TMP_Text _playerHealth;
-
-    [Header("Settings")]
-    [SerializeField] private GameObject _settingsMenu;
+    [SerializeField] private GameObject _playerNameScreen;
+    [SerializeField] private TMP_Text _playerName;
 
     private void OnEnable()
     {
@@ -28,12 +27,6 @@ public sealed class UIManger : MonoBehaviour
         GameManager.OnGameStateChange -= GameStateChanged;
     }
 
-    public void SetPlayerTimer(string text = "", bool enabled = true)
-    {
-        _playerTimer.text = text;
-        _playerTimerScreen.SetActive(enabled);
-    }
-
     private void GameStateChanged(GameState state)
     {
         if (state == GameState.PlayerSwitch) return;
@@ -42,6 +35,7 @@ public sealed class UIManger : MonoBehaviour
         //Debug.Log("1 _crosshair.activeInHierarchy = " + _crosshair.activeInHierarchy);
 
         _crosshair.SetActive(state == GameState.PlayerTurn);
+        _playerNameScreen.SetActive(state == GameState.PlayerTurn);
         _playerHealthScreen.SetActive(state == GameState.PlayerTurn);
         _gameoverScreen.SetActive(state == GameState.GameOver);
 
@@ -54,6 +48,7 @@ public sealed class UIManger : MonoBehaviour
         }
         else if (state == GameState.PlayerTurn)
         {
+            _playerName.text = _playerManager.GetActivePlayerName();
             _playerHealth.text = _playerManager.GetActivePlayerHealth();
             StartCoroutine(StartPlayerTimer());
         }
