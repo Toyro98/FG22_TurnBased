@@ -4,7 +4,7 @@ using TMPro;
 public sealed class Player : MonoBehaviour, IDamageable
 {
     public PlayerManager playerManager;
-    public new string name = "Name";
+    public new string name = "";
     public int health = 100;
     public int index = 0;
 
