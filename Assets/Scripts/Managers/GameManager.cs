@@ -4,13 +4,14 @@ using UnityEngine;
 public sealed class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
-    private GameState _state;
 
     public static event GameStateChange OnGameStateChange;
     public delegate void GameStateChange(GameState state);
 
-    private PlayerManager _playerManager;
-    
+    public GameSettings GameSettings { get; private set; }
+   
+    [SerializeField] private PlayerManager _playerManager;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,7 +24,12 @@ public sealed class GameManager : MonoBehaviour
 
     private void Start()
     {
-        _playerManager = GetComponent<PlayerManager>();   
+        GameSettings = new GameSettings()
+        {
+            totalPlayTime = 45,
+            timePerPlayer = 20,
+            players = 4
+        };
     }
 
     private void Update()
@@ -36,9 +42,7 @@ public sealed class GameManager : MonoBehaviour
 
     public void UpdateGameState(GameState state)
     {
-        _state = state;
-        
-        switch (_state)
+        switch (state)
         {
             case GameState.Start:
                 HandleGameStart();
@@ -46,8 +50,8 @@ public sealed class GameManager : MonoBehaviour
             case GameState.PlayerTurn:
                 HandlePlayerTurn();
                 break;
-            case GameState.Test:
-                HandleTest();
+            case GameState.PlayerSwitch:
+                HandlePlayerSwitch();
                 break;
             case GameState.GameOver:
                 HandleGameOver();
@@ -56,7 +60,7 @@ public sealed class GameManager : MonoBehaviour
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
         
-        OnGameStateChange?.Invoke(_state);
+        OnGameStateChange?.Invoke(state);
     }
 
     private void HandleGameStart()
@@ -65,6 +69,7 @@ public sealed class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         Debug.Log("<< New Game has started! Creating Players >>");
+        _playerManager.CreatePlayers();
     }
     
     private void HandlePlayerTurn()
@@ -72,9 +77,9 @@ public sealed class GameManager : MonoBehaviour
         Debug.Log("<< GameState has changed to Player's Turn >>");
     }
 
-    private void HandleTest()
+    private void HandlePlayerSwitch()
     {
-
+        Debug.Log("<< Switching Player >>");
     }
 
     private void HandleGameOver()
@@ -90,6 +95,6 @@ public enum GameState
 {
     Start,
     PlayerTurn,
-    Test,
+    PlayerSwitch,
     GameOver
 }
