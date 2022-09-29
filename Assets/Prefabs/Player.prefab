@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2104213986494557781}
   m_Layer: 3
-  m_Name: GameObject
+  m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 322300067231128688}
   - component: {fileID: 2732347219212120210}
   - component: {fileID: 8128616386361094460}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -160,7 +160,6 @@ MonoBehaviour:
   _playerMovement: {fileID: 8128616386361094460}
   _playerCamera: {fileID: 4341900685978980830}
   _playerCameraScript: {fileID: 374577620945765331}
-  _rocketPrefab: {fileID: 795890309174452990, guid: 6026892448e1cf44b87f410a960ef155, type: 3}
 --- !u!143 &2732347219212120210
 CharacterController:
   m_ObjectHideFlags: 0
@@ -192,7 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  jumpHeight: 1
+  jumpHeight: 2.5
   canMoveAround: 0
   groundCheck: {fileID: 2104213986494557781}
   groundLayer:
@@ -826,7 +825,7 @@ GameObject:
   - component: {fileID: 5791804082362982538}
   - component: {fileID: 2154558302987716212}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: RigidBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
