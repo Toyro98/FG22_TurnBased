@@ -15,14 +15,17 @@ public sealed class UIManger : MonoBehaviour
     [SerializeField] private GameObject _playerHealthScreen;
     [SerializeField] private TMP_Text _playerHealth;
 
+    [Header("Settings")]
+    [SerializeField] private GameObject _settingsMenu;
+
     private void OnEnable()
     {
-        GameManager.OnGameStateChange += Time;
+        GameManager.OnGameStateChange += GameStateChanged;
     }
 
     private void OnDisable()
     {
-        GameManager.OnGameStateChange -= Time;
+        GameManager.OnGameStateChange -= GameStateChanged;
     }
 
     public void SetPlayerTimer(string text = "", bool enabled = true)
@@ -31,20 +34,28 @@ public sealed class UIManger : MonoBehaviour
         _playerTimerScreen.SetActive(enabled);
     }
 
-    private void Time(GameState state)
+    private void GameStateChanged(GameState state)
     {
+        if (state == GameState.PlayerSwitch) return;
+
+        //Debug.Log("state = " + state);
+        //Debug.Log("1 _crosshair.activeInHierarchy = " + _crosshair.activeInHierarchy);
+
         _crosshair.SetActive(state == GameState.PlayerTurn);
         _playerHealthScreen.SetActive(state == GameState.PlayerTurn);
         _gameoverScreen.SetActive(state == GameState.GameOver);
 
+        //Debug.Log("2 _crosshair.activeInHierarchy = " + _crosshair.activeInHierarchy);
+        
         if (state == GameState.Start)
         {
             _gameTimerScreen.SetActive(true);
-            StartCoroutine(Timer(45));
+            StartCoroutine(StartGameTimer());
         }
         else if (state == GameState.PlayerTurn)
         {
             _playerHealth.text = _playerManager.GetActivePlayerHealth();
+            StartCoroutine(StartPlayerTimer());
         }
         else if (state == GameState.GameOver)
         {
@@ -52,22 +63,48 @@ public sealed class UIManger : MonoBehaviour
         }
     }
 
-    private IEnumerator Timer(int minutes)
+    private IEnumerator StartGameTimer()
     {
-        int time = 60 * minutes;
+        int time = GameManager.Instance.GameSettings.totalPlayTime * 60;
         WaitForSeconds delay = new WaitForSeconds(1f);
-        
-        while (time > -1)
+
+        // Game has started
+        GameManager.Instance.UpdateGameState(GameState.PlayerTurn);
+
+        while (time > 0)
         {
-            var timeSpan = TimeSpan.FromSeconds(time);
-            _gameTimer.text = string.Format("{0:D}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
+            var timeSpan = TimeSpan.FromSeconds(time--);
+
+            if (time >= 3600)
+            {
+                _gameTimer.text = string.Format("{0:D}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+            }
+            else
+            {
+                _gameTimer.text = string.Format("{0:D}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
+            }
             
             yield return delay;
-            
-            time--;
         }
 
-        // Once timer reached 0, we update the game state
         GameManager.Instance.UpdateGameState(GameState.GameOver);
+    }
+
+    private IEnumerator StartPlayerTimer()
+    {
+        int time = GameManager.Instance.GameSettings.timePerPlayer;
+        WaitForSeconds delay = new WaitForSeconds(1f);
+        _playerTimerScreen.SetActive(true);
+
+        while (time > 0)
+        {
+            var timeSpan = TimeSpan.FromSeconds(time--);
+            _playerTimer.text = string.Format("{0:D2}", timeSpan.Seconds);
+
+            yield return delay;
+        }
+
+        _playerTimerScreen.SetActive(false);
+        GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
     }
 }
