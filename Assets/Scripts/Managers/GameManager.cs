@@ -24,20 +24,16 @@ public sealed class GameManager : MonoBehaviour
 
     private void Start()
     {
-        GameSettings = new GameSettings()
-        {
-            totalPlayTime = 45,
-            timePerPlayer = 20,
-            players = 4
-        };
-    }
+        GameSettings = FindObjectOfType<GameSettings>();
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
+        // Remove this before leaving in assignment
+        // Only here if you didn't start from mainmenu
+        if (GameSettings == null)
         {
-            UpdateGameState(GameState.Start);
+            GameSettings = gameObject.AddComponent<GameSettings>();
         }
+
+        UpdateGameState(GameState.Start);
     }
 
     public void UpdateGameState(GameState state)
