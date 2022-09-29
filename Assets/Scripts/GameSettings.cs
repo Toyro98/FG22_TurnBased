@@ -2,18 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class GameSettings
+public sealed class GameSettings : MonoBehaviour
 {
     public int totalPlayTime = 45;
     public int timePerPlayer = 15;
     public int players = 4;
+    public int playerHealth = 100;
 
-    public GameSettings() {}
-
-    public GameSettings(int totalPlayTime, int timePerPlayer, int players)
+    public void Awake()
     {
-        this.totalPlayTime = totalPlayTime;
-        this.timePerPlayer = timePerPlayer;
-        this.players = players;
+        DontDestroyOnLoad(this);
     }
 }
