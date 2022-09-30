@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,9 +5,9 @@ public sealed class PlayerManager : MonoBehaviour
 {
     [SerializeField] private UIManger _uiManger;
     [SerializeField] private Rocket _rocketPrefab;
+    [SerializeField] private Player _playerPrefab;
+    [SerializeField] private List<Player> _playerList;
 
-    public Player playerPrefab;
-    public List<Player> playerList;
     public int activePlayerIndex = 0;
     public Camera activeCamera;
     private GameState _gameState;
@@ -33,8 +32,8 @@ public sealed class PlayerManager : MonoBehaviour
         // Left Click
         if (Input.GetButtonDown("Fire1"))
         {
-            Transform tr = playerList[activePlayerIndex].GetPlayerCameraTransform();
-            Instantiate(_rocketPrefab, tr.transform.position, tr.transform.rotation, null);
+            Transform camera = _playerList[activePlayerIndex].playerCamera.transform;
+            Instantiate(_rocketPrefab, camera.transform.position + camera.transform.forward * 2, camera.transform.rotation, null);
         }
 
         // Right Click
@@ -59,34 +58,26 @@ public sealed class PlayerManager : MonoBehaviour
 
     public void CreatePlayers()
     {
-        for (int i = 0; i < playerList.Count; i++)
-        {
-            Destroy(playerList[i]);
-        }
-
-        playerList.Clear();
-
-        int players = GameManager.Instance.GameSettings.players;
+        int playerCount = GameManager.Instance.GameSettings.playerCount;
         int health = GameManager.Instance.GameSettings.playerHealth;
 
-        for (int i = 0; i < players; i++)
+        for (int i = 0; i < playerCount; i++)
         {
-            // Instantiate player and set its name
-            Player player = Instantiate(playerPrefab, new Vector3(Random.Range(19f, -19f), 0.5f, Random.Range(19f, -19f)), Quaternion.identity);
-
+            // TODO: Create spawnpoints on the map and pick a random location from it. If a player has already spawned there, look for a new location
+            Player player = Instantiate(_playerPrefab, new Vector3(Random.Range(19f, -19f), 0.5f, Random.Range(19f, -19f)), Quaternion.identity);
             player.name = "Player " + (i + 1);
             player.index = i;
             player.health = health;
             player.playerManager = this;
 
-            // Add the player to a list
-            playerList.Add(player);
+            _playerList.Add(player);
 
-            // ACtivate movement and camera for the first player
+            // Activate movement and camera for the first player only
+            // Otherwise focus the camera to the first player for other players
             if (activePlayerIndex == i)
             {
                 player.Toggle();
-                activeCamera = player.GetComponentInChildren<Camera>();
+                activeCamera = player.playerCamera;
             }
             else
             {
@@ -99,68 +90,52 @@ public sealed class PlayerManager : MonoBehaviour
 
     public void SwitchPlayer()
     {
-        if (playerList[activePlayerIndex] != null)
+        // Turn off the movement and camera for the active player
+        if (_playerList[activePlayerIndex] != null)
         {
-            playerList[activePlayerIndex].Toggle(); 
+            _playerList[activePlayerIndex].Toggle(); 
         }
 
+        // Increase the index by 1 and check if the player exist
         do
         {
             activePlayerIndex++;
-            activePlayerIndex %= playerList.Count;
+            activePlayerIndex %= _playerList.Count;
         } 
-        while (playerList[activePlayerIndex] == null);
+        while (_playerList[activePlayerIndex] == null);
 
-        // Turns on the playermovement, camera, and etc
-        playerList[activePlayerIndex].Toggle();
+        // The current player index is alive and we turn on movement and camera for the player
+        _playerList[activePlayerIndex].Toggle();
     }
 
     public void UpdateCameraLookAt()
     {
         // Update the activeCamera for the new player
-        activeCamera = playerList[activePlayerIndex].GetComponentInChildren<Camera>();
+        activeCamera = _playerList[activePlayerIndex].playerCamera;
 
-        // Update it for all the players
-        for (int i = 0; i < playerList.Count; i++)
+        // Update it for all the players so it looks at the active player
+        for (int i = 0; i < _playerList.Count; i++)
         {
-            if (activePlayerIndex != i && playerList[i] != null)
+            // Don't update if it's the same person and player doesn't exist
+            if (activePlayerIndex != i && _playerList[i] != null)
             {
-                playerList[i].SetCamera(activeCamera);
+                _playerList[i].SetCamera(activeCamera);
             }
         }
     }
 
     public void RemovePlayer(int index)
     {
-        playerList[index] = null;
-
-        int playersAlive = 0;
-
-        for (int i = 0; i < playerList.Count; i++)
-        {
-            if (playerList[i] != null)
-            {
-                playersAlive++;
-            }
-        }
-
-        if (playersAlive <= 1)
-        {
-            GameManager.Instance.UpdateGameState(GameState.GameOver);
-        }
-        else
-        {
-            GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
-        }
+        _playerList[index] = null;
     }
 
     public string GetActivePlayerName()
     {
-        return playerList[activePlayerIndex].name;
+        return _playerList[activePlayerIndex].name;
     }
 
     public string GetActivePlayerHealth()
     {
-        return playerList[activePlayerIndex].health.ToString();
+        return _playerList[activePlayerIndex].health.ToString();
     }
 }

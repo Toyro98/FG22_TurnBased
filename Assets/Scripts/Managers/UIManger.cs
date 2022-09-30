@@ -5,6 +5,7 @@ using TMPro;
 
 public sealed class UIManger : MonoBehaviour
 {
+    readonly WaitForSeconds delay = new WaitForSeconds(1f);
     [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private GameObject _crosshair;
     [SerializeField] private GameObject _gameoverScreen;
@@ -31,16 +32,11 @@ public sealed class UIManger : MonoBehaviour
     {
         if (state == GameState.PlayerSwitch) return;
 
-        //Debug.Log("state = " + state);
-        //Debug.Log("1 _crosshair.activeInHierarchy = " + _crosshair.activeInHierarchy);
-
         _crosshair.SetActive(state == GameState.PlayerTurn);
         _playerNameScreen.SetActive(state == GameState.PlayerTurn);
         _playerHealthScreen.SetActive(state == GameState.PlayerTurn);
         _gameoverScreen.SetActive(state == GameState.GameOver);
 
-        //Debug.Log("2 _crosshair.activeInHierarchy = " + _crosshair.activeInHierarchy);
-        
         if (state == GameState.Start)
         {
             _gameTimerScreen.SetActive(true);
@@ -60,10 +56,9 @@ public sealed class UIManger : MonoBehaviour
 
     private IEnumerator StartGameTimer()
     {
-        int time = GameManager.Instance.GameSettings.totalPlayTime * 60;
-        WaitForSeconds delay = new WaitForSeconds(1f);
+        int time = GameManager.Instance.GameSettings.gameTime * 60;
 
-        // Game has started
+        // Everything is now prepared and is now ready to update the game state
         GameManager.Instance.UpdateGameState(GameState.PlayerTurn);
 
         while (time > 0)
@@ -82,13 +77,13 @@ public sealed class UIManger : MonoBehaviour
             yield return delay;
         }
 
+        // Time ran out 
         GameManager.Instance.UpdateGameState(GameState.GameOver);
     }
 
     private IEnumerator StartPlayerTimer()
     {
         int time = GameManager.Instance.GameSettings.timePerPlayer;
-        WaitForSeconds delay = new WaitForSeconds(1f);
         _playerTimerScreen.SetActive(true);
 
         while (time > 0)
@@ -99,6 +94,7 @@ public sealed class UIManger : MonoBehaviour
             yield return delay;
         }
 
+        // Hide the timer if the time ran out and switch player
         _playerTimerScreen.SetActive(false);
         GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
     }

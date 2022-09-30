@@ -24,15 +24,10 @@ public sealed class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Get GameSettings from the gameobject that's always loaded
         GameSettings = FindObjectOfType<GameSettings>();
 
-        // Remove this before leaving in assignment
-        // Only here if you didn't start from mainmenu
-        if (GameSettings == null)
-        {
-            GameSettings = gameObject.AddComponent<GameSettings>();
-        }
-
+        // Once we got the gamesettings, prepare to start the game
         UpdateGameState(GameState.Start);
     }
 
@@ -44,10 +39,10 @@ public sealed class GameManager : MonoBehaviour
                 HandleGameStart();
                 break;
             case GameState.PlayerTurn:
-                HandlePlayerTurn();
+                Debug.Log("<< GameState has changed to Player's Turn >>");
                 break;
             case GameState.PlayerSwitch:
-                HandlePlayerSwitch();
+                Debug.Log("<< Switching Player >>");
                 break;
             case GameState.GameOver:
                 HandleGameOver();
@@ -66,16 +61,6 @@ public sealed class GameManager : MonoBehaviour
 
         Debug.Log("<< New Game has started! Creating Players >>");
         _playerManager.CreatePlayers();
-    }
-    
-    private void HandlePlayerTurn()
-    {
-        Debug.Log("<< GameState has changed to Player's Turn >>");
-    }
-
-    private void HandlePlayerSwitch()
-    {
-        Debug.Log("<< Switching Player >>");
     }
 
     private void HandleGameOver()

@@ -17,8 +17,8 @@ public sealed class Player : MonoBehaviour, IDamageable
     [Header("Player")]
     [SerializeField] private MeshRenderer _playerMesh;
     [SerializeField] private PlayerMovement _playerMovement;
-    [SerializeField] private Camera _playerCamera;
     [SerializeField] private PlayerCamera _playerCameraScript;
+    public Camera playerCamera;
 
     private void Start()
     {
@@ -41,7 +41,7 @@ public sealed class Player : MonoBehaviour, IDamageable
 
     public void Toggle()
     {
-        // Hides the canvas above the active player but shows the canvas above other players
+        // Hides the canvas above the active player when it's their turn. Otherwise, show it
         _canvas.enabled = !_canvas.enabled;
 
         // Instead of toggling on and off the script, we change a variable so the player can fall down if they jumped before the switch
@@ -49,7 +49,7 @@ public sealed class Player : MonoBehaviour, IDamageable
 
         // Toggle on or off scripts and player's mesh
         _playerCameraScript.enabled = !_playerCameraScript.enabled;
-        _playerCamera.enabled = !_playerCamera.enabled;
+        playerCamera.enabled = !playerCamera.enabled;
         _playerMesh.enabled = !_playerMesh.enabled;
     }
 
@@ -69,10 +69,5 @@ public sealed class Player : MonoBehaviour, IDamageable
             playerManager.RemovePlayer(index);
             Destroy(gameObject);
         }
-    }
-
-    public Transform GetPlayerCameraTransform()
-    {
-        return _playerCamera.transform;
     }
 }
