@@ -1039,8 +1039,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiManger: {fileID: 1608869153}
   _rocketPrefab: {fileID: 795890309174452990, guid: 6026892448e1cf44b87f410a960ef155, type: 3}
-  playerPrefab: {fileID: 322300067231128688, guid: c3ce9d9685c07ea478096dd96362fda2, type: 3}
-  playerList: []
+  _playerPrefab: {fileID: 322300067231128688, guid: c3ce9d9685c07ea478096dd96362fda2, type: 3}
+  _playerList: []
   activePlayerIndex: 0
   activeCamera: {fileID: 0}
 --- !u!4 &679066460
