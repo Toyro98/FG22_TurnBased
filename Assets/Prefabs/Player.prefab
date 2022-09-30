@@ -158,8 +158,8 @@ MonoBehaviour:
   _healthText: {fileID: 7819176949687593748}
   _playerMesh: {fileID: 8524021424712093395}
   _playerMovement: {fileID: 8128616386361094460}
-  _playerCamera: {fileID: 4341900685978980830}
   _playerCameraScript: {fileID: 374577620945765331}
+  playerCamera: {fileID: 4341900685978980830}
 --- !u!143 &2732347219212120210
 CharacterController:
   m_ObjectHideFlags: 0
