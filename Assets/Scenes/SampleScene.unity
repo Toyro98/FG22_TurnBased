@@ -1039,8 +1039,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiManger: {fileID: 1608869153}
   _rocketPrefab: {fileID: 795890309174452990, guid: 6026892448e1cf44b87f410a960ef155, type: 3}
+  _grenadePrefab: {fileID: 0}
   _playerPrefab: {fileID: 322300067231128688, guid: c3ce9d9685c07ea478096dd96362fda2, type: 3}
   _playerList: []
+  _possibleSpawnLocations:
+  - {fileID: 1403460687}
+  - {fileID: 2142547187}
   activePlayerIndex: 0
   activeCamera: {fileID: 0}
 --- !u!4 &679066460
@@ -2073,14 +2077,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1403460686}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: 0.4999996, z: -0, w: 0.8660257}
+  m_LocalPosition: {x: -12.5, y: 0, z: -2.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2103866792}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 60, z: 0}
 --- !u!1 &1495064437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2818,11 +2822,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2142547186}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.60876125, z: -0, w: 0.7933535}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2103866792}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -75, z: 0}
