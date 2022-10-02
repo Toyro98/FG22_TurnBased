@@ -4,13 +4,17 @@ using UnityEngine;
 public sealed class PlayerManager : MonoBehaviour
 {
     [SerializeField] private UIManger _uiManger;
-    [SerializeField] private Rocket _rocketPrefab;
+    [SerializeField] private Projectile _rocketPrefab;
+    [SerializeField] private Projectile _grenadePrefab;
     [SerializeField] private Player _playerPrefab;
     [SerializeField] private List<Player> _playerList;
+    [SerializeField] private List<Transform> _possibleSpawnLocations;
+    private List<Transform> _spawnedLocations = new List<Transform>();
 
     public int activePlayerIndex = 0;
     public Camera activeCamera;
     private GameState _gameState;
+    private float charge = 1f;
 
     private void OnEnable()
     {
@@ -29,18 +33,42 @@ public sealed class PlayerManager : MonoBehaviour
             return;
         }
 
-        // Left Click
-        if (Input.GetButtonDown("Fire1"))
+        // Todo: Create new file for managing shooting
+        NewMethod();
+    }
+
+    private void NewMethod()
+    {
+        // 0 = Left Click
+        // 1 = Right Click
+
+        if (Input.GetMouseButtonDown(0))
         {
-            Transform camera = _playerList[activePlayerIndex].playerCamera.transform;
-            Instantiate(_rocketPrefab, camera.transform.position + camera.transform.forward * 2, camera.transform.rotation, null);
+            InstantiateProjectile(ProjectileWeapon.Rocket, 0);
+
+            return;
         }
 
-        // Right Click
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetMouseButton(1))
         {
-            Debug.Log("todo");
+            charge += Time.deltaTime;
+
+            // Todo: Create UI showing the charge
         }
+
+        if (Input.GetMouseButtonUp(1) && charge > 1f)
+        {
+            InstantiateProjectile(ProjectileWeapon.Granade, charge);
+        }
+    }
+
+    private void InstantiateProjectile(ProjectileWeapon projectileType, float charge)
+    {
+        Transform camera = _playerList[activePlayerIndex].playerCamera.transform;
+        Projectile projectile = Instantiate(_rocketPrefab, camera.transform.position + camera.transform.forward * 2, camera.transform.rotation, null);
+
+        projectile.projectile = projectileType;
+        projectile.charge = charge;
     }
 
     private void GameStateChange(GameState state)
@@ -49,6 +77,8 @@ public sealed class PlayerManager : MonoBehaviour
 
         if (state == GameState.PlayerSwitch)
         {
+            charge = 1f;
+
             SwitchPlayer();
             UpdateCameraLookAt();
 
@@ -63,8 +93,7 @@ public sealed class PlayerManager : MonoBehaviour
 
         for (int i = 0; i < playerCount; i++)
         {
-            // TODO: Create spawnpoints on the map and pick a random location from it. If a player has already spawned there, look for a new location
-            Player player = Instantiate(_playerPrefab, new Vector3(Random.Range(19f, -19f), 0.5f, Random.Range(19f, -19f)), Quaternion.identity);
+            Player player = Instantiate(_playerPrefab, FindUnusedSpawnLocation());
             player.name = "Player " + (i + 1);
             player.index = i;
             player.health = health;
@@ -86,6 +115,34 @@ public sealed class PlayerManager : MonoBehaviour
 
             player.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
         }
+    }
+
+    private Transform FindUnusedSpawnLocation()
+    {
+        Transform position;
+        bool alreadySpawned;
+
+        while (true)
+        {
+            position = _possibleSpawnLocations[Random.Range(0, _possibleSpawnLocations.Count)];
+            alreadySpawned = false;
+
+            for (int i = 0; i < _spawnedLocations.Count; i++)
+            {
+                if (position.position == _spawnedLocations[i].position)
+                {
+                    alreadySpawned = true;
+                }
+            }
+
+            if (!alreadySpawned)
+            {
+                _spawnedLocations.Add(position);
+                break;
+            }
+        }
+
+        return position;
     }
 
     public void SwitchPlayer()
