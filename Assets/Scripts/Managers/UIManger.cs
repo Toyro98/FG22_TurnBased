@@ -18,6 +18,8 @@ public sealed class UIManger : MonoBehaviour
     [SerializeField] private GameObject _playerNameScreen;
     [SerializeField] private TMP_Text _playerName;
 
+    private Coroutine _coroutine;
+
     private void OnEnable()
     {
         GameManager.OnGameStateChange += GameStateChanged;
@@ -30,11 +32,15 @@ public sealed class UIManger : MonoBehaviour
 
     private void GameStateChanged(GameState state)
     {
-        if (state == GameState.PlayerSwitch) return;
+        if (state == GameState.PlayerSwitch)
+        {
+            return;
+        }
 
         _crosshair.SetActive(state == GameState.PlayerTurn);
         _playerNameScreen.SetActive(state == GameState.PlayerTurn);
         _playerHealthScreen.SetActive(state == GameState.PlayerTurn);
+        _playerTimerScreen.SetActive(state == GameState.PlayerTurn);
         _gameoverScreen.SetActive(state == GameState.GameOver);
 
         if (state == GameState.Start)
@@ -46,11 +52,15 @@ public sealed class UIManger : MonoBehaviour
         {
             _playerName.text = _playerManager.GetActivePlayerName();
             _playerHealth.text = _playerManager.GetActivePlayerHealth();
-            StartCoroutine(StartPlayerTimer());
+            _coroutine = StartCoroutine(StartPlayerTimer());
         }
         else if (state == GameState.GameOver)
         {
             StopAllCoroutines();
+        }
+        else if (state == GameState.Wait)
+        {
+            StopCoroutine(_coroutine);
         }
     }
 
