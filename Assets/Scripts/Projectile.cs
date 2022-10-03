@@ -3,24 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Projectile : MonoBehaviour
+public sealed class Projectile : MonoBehaviour
 {
     public float charge;
     public float radius = 3f;
     public ProjectileWeapon projectile;
-    private Rigidbody _rigidbody;
+    public Rigidbody rb;
 
     private void Start()
     {
-        _rigidbody = GetComponent<Rigidbody>();    
-
         if (projectile == ProjectileWeapon.Granade)
         {
-            _rigidbody.AddForce(5f * charge * transform.forward, ForceMode.Impulse);
-        }
-        else
-        {
-            _rigidbody.AddForce(transform.forward, ForceMode.Impulse);
+            rb.AddForce(charge * transform.forward, ForceMode.Impulse);
         }
   
         Destroy(gameObject, 5f);
@@ -30,20 +24,34 @@ public class Projectile : MonoBehaviour
     {
         if (projectile == ProjectileWeapon.Rocket)
         {
-            _rigidbody.AddForce(transform.forward * 2, ForceMode.Impulse);
+            rb.AddForce(transform.forward, ForceMode.Impulse);
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log(collision.gameObject.name);
+        bool playerTookDamage = false;
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
-        if (collision.gameObject.TryGetComponent<IDamageable>(out var target))
+        foreach (Collider collider in colliders)
         {
-            target.TakeDamage(1);
+            if (collider.TryGetComponent<IDamageable>(out var test))
+            {
+                playerTookDamage = true;
+                Debug.Log("Distance:" + Vector3.Distance(transform.position, collider.transform.position));
+                test.TakeDamage(Random.Range(5, 16));
+            }
         }
 
-        Destroy(gameObject);
+        if (!playerTookDamage)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
     }
 }
 
