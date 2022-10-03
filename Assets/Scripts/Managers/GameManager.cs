@@ -44,6 +44,9 @@ public sealed class GameManager : MonoBehaviour
             case GameState.PlayerSwitch:
                 Debug.Log("<< Switching Player >>");
                 break;
+            case GameState.Wait:
+                Debug.Log("<< Waiting >>");
+                break;
             case GameState.GameOver:
                 HandleGameOver();
                 break;
@@ -77,5 +80,6 @@ public enum GameState
     Start,
     PlayerTurn,
     PlayerSwitch,
+    Wait,
     GameOver
 }
