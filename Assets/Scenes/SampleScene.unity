@@ -1018,6 +1018,7 @@ GameObject:
   m_Component:
   - component: {fileID: 679066460}
   - component: {fileID: 679066459}
+  - component: {fileID: 679066461}
   m_Layer: 0
   m_Name: Player Manager
   m_TagString: Untagged
@@ -1038,9 +1039,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _uiManger: {fileID: 1608869153}
-  _rocketPrefab: {fileID: 795890309174452990, guid: 6026892448e1cf44b87f410a960ef155, type: 3}
-  _grenadePrefab: {fileID: 0}
+  _rocketPrefab: {fileID: 7455469779177582580, guid: 6026892448e1cf44b87f410a960ef155, type: 3}
+  _grenadePrefab: {fileID: 7455469779177582580, guid: 523dbf9a28ce1d24e8e1e939d948268d, type: 3}
   _playerPrefab: {fileID: 322300067231128688, guid: c3ce9d9685c07ea478096dd96362fda2, type: 3}
+  _playerShooting: {fileID: 679066461}
   _playerList: []
   _possibleSpawnLocations:
   - {fileID: 1403460687}
@@ -1062,6 +1064,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &679066461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679066458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0358f60c41c6925488d0b1b0f5d8c643, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rocketPrefab: {fileID: 7455469779177582580, guid: 6026892448e1cf44b87f410a960ef155, type: 3}
+  _grenadePrefab: {fileID: 7455469779177582580, guid: 523dbf9a28ce1d24e8e1e939d948268d, type: 3}
+  _playerManager: {fileID: 679066459}
 --- !u!1 &699417978
 GameObject:
   m_ObjectHideFlags: 0
