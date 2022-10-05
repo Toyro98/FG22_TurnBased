@@ -68,15 +68,9 @@ public sealed class Player : MonoBehaviour, IDamageable
             playerManager.RemovePlayer(index);
             Destroy(gameObject);
         }
-    }
-
-    public void DisplayHitDamage(int damageTaken)
-    {
-        if (health <= 0)
+        else
         {
-            return;
+            playerManager.DisplayHitDamage(amount, transform);
         }
-
-        // Todo: Display how much damage you took and then have text move up and fade away
     }
 }
