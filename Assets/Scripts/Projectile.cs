@@ -8,8 +8,8 @@ public sealed class Projectile : MonoBehaviour
     public float charge;
     public float radius = 3f;
     public ProjectileWeapon projectile;
-    public Rigidbody rb;
-    private int _damage;
+    [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] private int _damage;
 
     private void Start()
     {
@@ -17,7 +17,7 @@ public sealed class Projectile : MonoBehaviour
 
         if (projectile == ProjectileWeapon.Granade)
         {
-            rb.AddForce(charge * transform.forward, ForceMode.Impulse);
+            _rigidbody.AddForce(charge * 2f * transform.forward, ForceMode.VelocityChange);
         }
   
         Destroy(gameObject, 5f);
@@ -27,7 +27,7 @@ public sealed class Projectile : MonoBehaviour
     {
         if (projectile == ProjectileWeapon.Rocket)
         {
-            rb.AddForce(transform.forward, ForceMode.Impulse);
+            _rigidbody.AddForce(transform.forward, ForceMode.Impulse);
         }
     }
 
