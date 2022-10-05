@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public sealed class UIManger : MonoBehaviour
@@ -8,7 +9,9 @@ public sealed class UIManger : MonoBehaviour
     readonly WaitForSeconds delay = new WaitForSeconds(1f);
     [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private GameObject _crosshair;
+    [SerializeField] private GameObject _pauseScreen;
     [SerializeField] private GameObject _gameoverScreen;
+
     [SerializeField] private GameObject _gameTimerScreen;
     [SerializeField] private TMP_Text _gameTimer;
     [SerializeField] private GameObject _playerTimerScreen;
@@ -17,6 +20,9 @@ public sealed class UIManger : MonoBehaviour
     [SerializeField] private TMP_Text _playerHealth;
     [SerializeField] private GameObject _playerNameScreen;
     [SerializeField] private TMP_Text _playerName;
+
+    [SerializeField] private GameObject _playerChargeScreen;
+    [SerializeField] private Slider _playerCharge;
 
     private Coroutine _coroutine;
 
@@ -30,6 +36,51 @@ public sealed class UIManger : MonoBehaviour
         GameManager.OnGameStateChange -= GameStateChanged;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !_gameoverScreen.activeInHierarchy)
+        {
+            if (GameManager.IsGamePaused)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                PauseGame();
+            }
+        } 
+    }
+
+    public void EnablePlayerChargeUI()
+    {
+        _playerChargeScreen.SetActive(true);
+    }
+
+    public void UpdatePlayerCharge(float value)
+    {
+        _playerCharge.value = value;
+    }
+
+    public void ResumeGame()
+    {
+        _pauseScreen.SetActive(false);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Time.timeScale = 1f;
+        GameManager.IsGamePaused = false;
+    }
+
+    public void PauseGame()
+    {
+        _pauseScreen.SetActive(true);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 0f;
+        GameManager.IsGamePaused = true;
+    }
+
     private void GameStateChanged(GameState state)
     {
         if (state == GameState.PlayerSwitch)
@@ -37,10 +88,11 @@ public sealed class UIManger : MonoBehaviour
             return;
         }
 
-        _crosshair.SetActive(state == GameState.PlayerTurn);
         _playerNameScreen.SetActive(state == GameState.PlayerTurn);
         _playerHealthScreen.SetActive(state == GameState.PlayerTurn);
         _playerTimerScreen.SetActive(state == GameState.PlayerTurn);
+        _playerChargeScreen.SetActive(false);
+        _crosshair.SetActive(state == GameState.PlayerTurn);
         _gameoverScreen.SetActive(state == GameState.GameOver);
 
         if (state == GameState.Start)
