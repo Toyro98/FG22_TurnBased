@@ -1508,9 +1508,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3fcb5cab1f4ab459cb33ec52b048a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalPlayTime: 45
+  gameTime: 45
   timePerPlayer: 15
-  players: 4
+  playerCount: 4
   playerHealth: 100
 --- !u!4 &438322294
 Transform:
