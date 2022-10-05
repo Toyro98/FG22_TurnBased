@@ -7,6 +7,7 @@ public sealed class PlayerShooting : MonoBehaviour
     [SerializeField] private Projectile _rocketPrefab;
     [SerializeField] private Projectile _grenadePrefab;
     [SerializeField] private PlayerManager _playerManager;
+    [SerializeField] private UIManger _uiManager;
 
     private float _charge = 1f;
 
@@ -17,22 +18,31 @@ public sealed class PlayerShooting : MonoBehaviour
 
     private void Update()
     {
+        // TODO: Fix so player doesn't shoot after resuming game
+        if (GameManager.IsGamePaused) return;
+
         // 0 = Left Click, 1 = Right Click
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonUp(0))
         {
             InstantiateProjectile(ProjectileWeapon.Rocket, 0);
 
             return;
         }
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButtonDown(1))
         {
-            _charge += Time.deltaTime;
-
-            // Todo: Create UI showing the charge
+            _uiManager.EnablePlayerChargeUI();
         }
 
-        if (Input.GetMouseButtonUp(1) && _charge > 1f)
+        if (Input.GetMouseButton(1))
+        {
+            if (_charge < 10f)
+            {
+                _uiManager.UpdatePlayerCharge(_charge += Time.deltaTime);
+            }
+        }
+
+        if (Input.GetMouseButtonUp(1))
         {
             InstantiateProjectile(ProjectileWeapon.Granade, _charge);
         }
