@@ -7,6 +7,7 @@ public sealed class PlayerManager : MonoBehaviour
     [SerializeField] private Projectile _rocketPrefab;
     [SerializeField] private Projectile _grenadePrefab;
     [SerializeField] private Player _playerPrefab;
+    [SerializeField] private Health _healthPrefab;
     [SerializeField] private PlayerShooting _playerShooting;
     [SerializeField] private List<Player> _playerList;
     [SerializeField] private List<Transform> _possibleSpawnLocations;
@@ -45,8 +46,11 @@ public sealed class PlayerManager : MonoBehaviour
 
         for (int i = 0; i < playerCount; i++)
         {
-            Player player = Instantiate(_playerPrefab, FindUnusedSpawnLocation());
+            Transform transform = FindUnusedSpawnLocation();
+            Player player = Instantiate(_playerPrefab, transform.position, transform.rotation, null);
+
             player.name = "Player " + (i + 1);
+            player.gameObject.name = "Player " + (i + 1);
             player.index = i;
             player.health = health;
             player.playerManager = this;
@@ -105,9 +109,41 @@ public sealed class PlayerManager : MonoBehaviour
         }
     }
 
+    public void DisplayHitDamage(int amount, Transform player)
+    {
+        Health health = Instantiate(_healthPrefab, player.transform.position, _playerList[activePlayerIndex].playerCamera.transform.rotation, player.transform);
+
+        health.cameraLookAt = activeCamera;
+        health.damage = amount;
+    }
+
     public void RemovePlayer(int index)
     {
         _playerList[index] = null;
+    }
+
+    public void CheckIfPlayersAreAlive()
+    {
+        int playersAlive = 0;
+
+        for (int i = 0; i < _playerList.Count; i++)
+        {
+            if (_playerList[i] != null)
+            {
+                playersAlive++;
+            }
+        }
+
+        Debug.Log("players alive " + playersAlive);
+
+        if (playersAlive > 1)
+        {
+            GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
+        } 
+        else
+        {
+            GameManager.Instance.UpdateGameState(GameState.GameOver);
+        }
     }
 
     public string GetActivePlayerName()
