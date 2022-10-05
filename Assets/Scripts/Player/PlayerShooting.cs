@@ -18,12 +18,12 @@ public sealed class PlayerShooting : MonoBehaviour
 
     private void Update()
     {
-        // TODO: Fix so player doesn't shoot after resuming game
-        if (GameManager.IsGamePaused) return;
+        if (GameManager.IsGamePaused) 
+            return;
 
-        // 0 = Left Click, 1 = Right Click
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonDown(0))
         {
+            Debug.Log("Time.frameCount: " + Time.frameCount);
             InstantiateProjectile(ProjectileWeapon.Rocket, 0);
 
             return;
