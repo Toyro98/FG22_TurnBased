@@ -114,7 +114,8 @@ MonoBehaviour:
   charge: 0
   radius: 3
   projectile: 1
-  rb: {fileID: 4346286589194525365}
+  _rigidbody: {fileID: 4346286589194525365}
+  _damage: 0
 --- !u!54 &4346286589194525365
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2104213986494557781}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: GroundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1262023036485789074}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.25, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 322300067231128688}
   - component: {fileID: 2732347219212120210}
   - component: {fileID: 8128616386361094460}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -174,14 +174,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28eaaa3af0c4eb8448d432532df13ce7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 4
   jumpHeight: 2.5
   canMoveAround: 0
-  groundCheck: {fileID: 2104213986494557781}
-  groundLayer:
+  _controller: {fileID: 2732347219212120210}
+  _groundCheck: {fileID: 2104213986494557781}
+  _groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  groundDistance: {x: 0, y: 0.5, z: 0}
+  _groundDistance: 0.3
+  _velocity: {x: 0, y: 0, z: 0}
+  _movement: {x: 0, y: 0, z: 0}
 --- !u!1 &2866280838775905353
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +196,7 @@ GameObject:
   - component: {fileID: 7594012603293891064}
   - component: {fileID: 5033971627233716184}
   - component: {fileID: 7232218506315933147}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -271,7 +274,7 @@ GameObject:
   - component: {fileID: 4341900685978980830}
   - component: {fileID: 5376377877368245624}
   - component: {fileID: 374577620945765331}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,8 +305,8 @@ Camera:
   m_GameObject: {fileID: 3146634882875037570}
   m_Enabled: 0
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.18039216, g: 0.20392157, b: 0.28627452, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -369,7 +372,7 @@ GameObject:
   - component: {fileID: 9130679425119642259}
   - component: {fileID: 1162016627205142088}
   - component: {fileID: 8784015636663155459}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +449,7 @@ GameObject:
   - component: {fileID: 7819176949687593749}
   - component: {fileID: 7819176949687593739}
   - component: {fileID: 7819176949687593748}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: PlayerHealthText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -581,7 +584,7 @@ GameObject:
   - component: {fileID: 7819176951176629218}
   - component: {fileID: 7819176951176629216}
   - component: {fileID: 7819176951176629217}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: PlayerNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -717,7 +720,7 @@ GameObject:
   - component: {fileID: 7819176951352451610}
   - component: {fileID: 7819176951352451611}
   - component: {fileID: 7819176951352451609}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
