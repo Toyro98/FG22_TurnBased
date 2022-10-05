@@ -9,9 +9,12 @@ public sealed class Projectile : MonoBehaviour
     public float radius = 3f;
     public ProjectileWeapon projectile;
     public Rigidbody rb;
+    private int _damage;
 
     private void Start()
     {
+        _damage = Random.Range(5, 16);
+
         if (projectile == ProjectileWeapon.Granade)
         {
             rb.AddForce(charge * transform.forward, ForceMode.Impulse);
@@ -30,28 +33,17 @@ public sealed class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        bool playerTookDamage = false;
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
         foreach (Collider collider in colliders)
         {
-            if (collider.TryGetComponent<IDamageable>(out var test))
+            if (collider.TryGetComponent<IDamageable>(out var player))
             {
-                playerTookDamage = true;
-                Debug.Log("Distance:" + Vector3.Distance(transform.position, collider.transform.position));
-                test.TakeDamage(Random.Range(5, 16));
+                player.TakeDamage(_damage);
             }
         }
 
-        if (!playerTookDamage)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
+        Destroy(gameObject);
     }
 }
 
