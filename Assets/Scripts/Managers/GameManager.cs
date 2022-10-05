@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public sealed class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public static bool IsGamePaused = false;
 
     public static event GameStateChange OnGameStateChange;
     public delegate void GameStateChange(GameState state);
@@ -46,6 +48,7 @@ public sealed class GameManager : MonoBehaviour
                 break;
             case GameState.Wait:
                 Debug.Log("<< Waiting >>");
+                StartCoroutine(Wait());
                 break;
             case GameState.GameOver:
                 HandleGameOver();
@@ -53,7 +56,7 @@ public sealed class GameManager : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
-        
+
         OnGameStateChange?.Invoke(state);
     }
 
@@ -72,6 +75,13 @@ public sealed class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
      
         Debug.Log("<< Game Over >>");
+    }
+
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(5f);
+
+        _playerManager.CheckIfPlayersAreAlive();
     }
 }
 
