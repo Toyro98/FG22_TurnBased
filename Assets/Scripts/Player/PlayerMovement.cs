@@ -34,7 +34,7 @@ public sealed class PlayerMovement : MonoBehaviour
             _velocity.y = -2f;
         }
 
-        if (canMoveAround)
+        if (canMoveAround && !GameManager.IsGamePaused)
         {
             _movement = transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
             _velocity.y += GRAVITY * Time.deltaTime;

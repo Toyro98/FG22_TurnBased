@@ -11,6 +11,8 @@ public sealed class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.IsGamePaused) return;
+
         // Gets the mouse input
         _yaw = Input.GetAxis("Mouse X") * sensitivity; // left right
         _pitch = Input.GetAxis("Mouse Y") * sensitivity; // up down
