@@ -13,4 +13,4 @@ Go to [Releases](https://github.com/Toyro98/TurnBasedGame/releases) and download
 | Space | Jump
 | Escape | Pauses the game
 | Left Click | Shoots a rocket
-| Right Click | Throws a granade (hold right click to charge it and too throw further)
+| Right Click | Throws a grenade (hold right click to charge it and too throw further)
