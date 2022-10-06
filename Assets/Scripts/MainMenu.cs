@@ -11,6 +11,8 @@ public sealed class MainMenu : MonoBehaviour
 
     public void Init()
     {
+        gameSettings = FindObjectOfType<GameSettings>();
+
         gameSettings.playerCount = int.Parse(playerCountDropdown.options[playerCountDropdown.value].text);
         gameSettings.playerHealth = int.Parse(playerHealthDropdown.options[playerHealthDropdown.value].text);
         gameSettings.gameTime = int.Parse(gameTimeDropdown.options[gameTimeDropdown.value].text);
