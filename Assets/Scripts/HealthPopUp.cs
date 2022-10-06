@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class HealthPopUp : MonoBehaviour
 {
     public int damage; 
     public Camera cameraLookAt;
+
     [SerializeField] private Animator animator;
     [SerializeField] private Canvas canvas;
     [SerializeField] private TMPro.TextMeshProUGUI healthText;

@@ -3,8 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public sealed class PlayerMovement : MonoBehaviour
 {
-    private const float GRAVITY = -9.81f;
-    
     public float speed = 4f;
     public float jumpHeight = 2.5f;
     public bool canMoveAround = false;
@@ -16,6 +14,8 @@ public sealed class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Vector3 _velocity;
     [SerializeField] private Vector3 _movement;
+
+    private const float GRAVITY = -9.81f;
 
     private void Update()
     {

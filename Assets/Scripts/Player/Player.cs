@@ -4,6 +4,7 @@ using TMPro;
 public sealed class Player : MonoBehaviour, IDamageable
 {
     public PlayerManager playerManager;
+    public Camera playerCamera;
     public new string name = "";
     public int health = 100;
     public int index = 0;
@@ -18,7 +19,6 @@ public sealed class Player : MonoBehaviour, IDamageable
     [SerializeField] private MeshRenderer _playerMesh;
     [SerializeField] private PlayerMovement _playerMovement;
     [SerializeField] private PlayerCamera _playerCameraScript;
-    public Camera playerCamera;
 
     private void Start()
     {
@@ -39,21 +39,22 @@ public sealed class Player : MonoBehaviour, IDamageable
         }
     }
 
-    public void Toggle()
+    public void ToggleEnabledState()
     {
         // Hides the canvas above the active player when it's their turn. Otherwise, show it
         _canvas.enabled = !_canvas.enabled;
 
-        // Instead of toggling on and off the script, we change a variable so the player can fall down if they jumped before the switch
+        // Instead of toggling on and off the player movement script,
+        // we change a variable so the player can fall down if they jumped before the switch
         _playerMovement.canMoveAround = !_playerMovement.canMoveAround;
 
         // Toggle on or off scripts and player's mesh
-        _playerCameraScript.enabled = !_playerCameraScript.enabled;
         playerCamera.enabled = !playerCamera.enabled;
+        _playerCameraScript.enabled = !_playerCameraScript.enabled;
         _playerMesh.enabled = !_playerMesh.enabled;
     }
 
-    public void SetCamera(Camera newCamera)
+    public void SetCameraLookAt(Camera newCamera)
     {
         _cameraLookAt = newCamera;
     }

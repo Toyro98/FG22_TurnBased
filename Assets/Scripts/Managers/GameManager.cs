@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -41,21 +40,12 @@ public sealed class GameManager : MonoBehaviour
             case GameState.Start:
                 HandleGameStart();
                 break;
-            case GameState.PlayerTurn:
-                Debug.Log("<< GameState has changed to Player's Turn >>");
-                break;
-            case GameState.PlayerSwitch:
-                Debug.Log("<< Switching Player >>");
-                break;
             case GameState.Wait:
-                Debug.Log("<< Waiting >>");
                 StartCoroutine(Wait());
                 break;
             case GameState.GameOver:
                 HandleGameOver();
                 break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
 
         OnGameStateChange?.Invoke(state);
@@ -66,7 +56,6 @@ public sealed class GameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        Debug.Log("<< New Game has started! Creating Players >>");
         _playerManager.CreatePlayers();
     }
 

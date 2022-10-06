@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -17,6 +15,7 @@ public sealed class Projectile : MonoBehaviour
 
         if (projectile == ProjectileWeapon.Granade)
         {
+            _damage *= 2;
             _rigidbody.AddForce(charge * 2f * transform.forward, ForceMode.VelocityChange);
         }
   

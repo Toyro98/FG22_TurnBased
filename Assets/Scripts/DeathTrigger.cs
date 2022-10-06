@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class DeathTrigger : MonoBehaviour
@@ -11,7 +9,8 @@ public sealed class DeathTrigger : MonoBehaviour
             Player player = other.GetComponent<Player>();
 
             player.playerManager.RemovePlayer(player.index);
-            Destroy(player.gameObject);
         }
+
+        Destroy(other.gameObject);
     }
 }

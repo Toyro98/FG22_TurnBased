@@ -6,24 +6,24 @@ using TMPro;
 
 public sealed class UIManger : MonoBehaviour
 {
-    readonly WaitForSeconds delay = new WaitForSeconds(1f);
     [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private GameObject _crosshair;
     [SerializeField] private GameObject _pauseScreen;
-
     [SerializeField] private GameObject _gameTimerScreen;
     [SerializeField] private TMP_Text _gameTimer;
     [SerializeField] private GameObject _playerTimerScreen;
     [SerializeField] private TMP_Text _playerTimer;
+    [SerializeField] private GameObject _playerSwitchScreen;
+    [SerializeField] private TMP_Text _playerSwitch;
     [SerializeField] private GameObject _playerHealthScreen;
     [SerializeField] private TMP_Text _playerHealth;
     [SerializeField] private GameObject _playerNameScreen;
     [SerializeField] private TMP_Text _playerName;
-
     [SerializeField] private GameObject _playerChargeScreen;
     [SerializeField] private Slider _playerCharge;
 
     private Coroutine _coroutine;
+    private readonly WaitForSeconds _delay = new WaitForSeconds(1f);
 
     private void OnEnable()
     {
@@ -41,11 +41,11 @@ public sealed class UIManger : MonoBehaviour
         {
             if (GameManager.IsGamePaused)
             {
-                ResumeGame();
+                ActivatePauseMenu(false);
             }
             else
             {
-                PauseGame();
+                ActivatePauseMenu(true);
             }
         } 
     }
@@ -60,24 +60,14 @@ public sealed class UIManger : MonoBehaviour
         _playerCharge.value = value;
     }
 
-    public void ResumeGame()
+    private void ActivatePauseMenu(bool status)
     {
-        _pauseScreen.SetActive(false);
+        _pauseScreen.SetActive(status);
 
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-        Time.timeScale = 1f;
-        GameManager.IsGamePaused = false;
-    }
-
-    public void PauseGame()
-    {
-        _pauseScreen.SetActive(true);
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-        Time.timeScale = 0f;
-        GameManager.IsGamePaused = true;
+        Cursor.visible = status;
+        Cursor.lockState = status ? CursorLockMode.None: CursorLockMode.Locked;
+        Time.timeScale = status ? 0f : 1f;
+        GameManager.IsGamePaused = status;
     }
 
     private void GameStateChanged(GameState state)
@@ -107,6 +97,7 @@ public sealed class UIManger : MonoBehaviour
         else if (state == GameState.Wait)
         {
             StopCoroutine(_coroutine);
+            StartCoroutine(StartPlayerSwitchTimer());
         }
     }
 
@@ -130,10 +121,9 @@ public sealed class UIManger : MonoBehaviour
                 _gameTimer.text = string.Format("{0:D}:{1:D2}", timeSpan.Minutes, timeSpan.Seconds);
             }
             
-            yield return delay;
+            yield return _delay;
         }
 
-        // Time ran out 
         GameManager.Instance.UpdateGameState(GameState.GameOver);
     }
 
@@ -144,14 +134,31 @@ public sealed class UIManger : MonoBehaviour
 
         while (time > 0)
         {
-            var timeSpan = TimeSpan.FromSeconds(time--);
-            _playerTimer.text = string.Format("{0:D2}", timeSpan.Seconds);
+            time--;
+            _playerTimer.text = string.Format("{0:D2}", time);
 
-            yield return delay;
+            yield return _delay;
         }
 
         // Hide the timer if the time ran out and switch player
         _playerTimerScreen.SetActive(false);
         GameManager.Instance.UpdateGameState(GameState.PlayerSwitch);
+    }
+
+    private IEnumerator StartPlayerSwitchTimer()
+    {
+        int time = 5;
+        _playerSwitchScreen.SetActive(true);
+
+        while (time > 0)
+        {
+            time--;
+            _playerSwitch.text = string.Format("Switching In {0}", time);
+
+            yield return _delay;
+        }
+
+        _playerSwitchScreen.SetActive(false);
+        StopCoroutine(StartPlayerSwitchTimer());
     }
 }

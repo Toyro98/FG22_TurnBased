@@ -3,16 +3,16 @@ using UnityEngine;
 
 public sealed class PlayerManager : MonoBehaviour
 {
+    public int activePlayerIndex = 0;
+    public Camera activeCamera;
+
     [SerializeField] private UIManger _uiManger;
     [SerializeField] private Player _playerPrefab;
     [SerializeField] private HealthPopUp _healthPrefab;
     [SerializeField] private PlayerShooting _playerShooting;
     [SerializeField] private List<Player> _playerList;
     [SerializeField] private List<Transform> _possibleSpawnLocations;
-    private List<Transform> _spawnedLocations = new List<Transform>();
-
-    public int activePlayerIndex = 0;
-    public Camera activeCamera;
+    [SerializeField] private List<Transform> _spawnedLocations = new List<Transform>();
 
     private void OnEnable()
     {
@@ -59,12 +59,12 @@ public sealed class PlayerManager : MonoBehaviour
             // Otherwise focus the camera to the first player for other players
             if (activePlayerIndex == i)
             {
-                player.Toggle();
+                player.ToggleEnabledState();
                 activeCamera = player.playerCamera;
             }
             else
             {
-                player.SetCamera(activeCamera);
+                player.SetCameraLookAt(activeCamera);
             }
 
             player.GetComponent<MeshRenderer>().material.color = new Color(Random.value, Random.value, Random.value);
@@ -76,7 +76,7 @@ public sealed class PlayerManager : MonoBehaviour
         // Turn off the movement and camera for the active player
         if (_playerList[activePlayerIndex] != null)
         {
-            _playerList[activePlayerIndex].Toggle(); 
+            _playerList[activePlayerIndex].ToggleEnabledState(); 
         }
 
         // Increase the index by 1 and check if the player exist
@@ -88,7 +88,7 @@ public sealed class PlayerManager : MonoBehaviour
         while (_playerList[activePlayerIndex] == null);
 
         // The current player index is alive and we turn on movement and camera for the player
-        _playerList[activePlayerIndex].Toggle();
+        _playerList[activePlayerIndex].ToggleEnabledState();
     }
 
     public void UpdateCameraLookAt()
@@ -102,23 +102,25 @@ public sealed class PlayerManager : MonoBehaviour
             // Don't update if it's the same person and player doesn't exist
             if (activePlayerIndex != i && _playerList[i] != null)
             {
-                _playerList[i].SetCamera(activeCamera);
+                _playerList[i].SetCameraLookAt(activeCamera);
             }
         }
     }
 
     public void DisplayHitDamage(int amount, Transform player)
     {
-        HealthPopUp health = Instantiate(_healthPrefab, player.transform.position, _playerList[activePlayerIndex].playerCamera.transform.rotation, player.transform);
+        HealthPopUp popUp = Instantiate(_healthPrefab, player.transform.position, _playerList[activePlayerIndex].playerCamera.transform.rotation, player.transform);
 
-        health.cameraLookAt = activeCamera;
-        health.damage = amount;
+        popUp.cameraLookAt = activeCamera;
+        popUp.damage = amount;
     }
 
     public void RemovePlayer(int index)
     {
+        // Set player to null in the list and destroy the gameObject
         _playerList[index] = null;
 
+        // If the active player went out of bounds, wait 5 seconds before switching player
         if (activePlayerIndex == index)
         {
             GameManager.Instance.UpdateGameState(GameState.Wait);

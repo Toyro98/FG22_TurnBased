@@ -13,11 +13,11 @@ public sealed class PlayerCamera : MonoBehaviour
     {
         if (GameManager.IsGamePaused) return;
 
-        // Gets the mouse input
-        _yaw = Input.GetAxis("Mouse X") * sensitivity; // left right
-        _pitch = Input.GetAxis("Mouse Y") * sensitivity; // up down
+        // Mouse input
+        _yaw = Input.GetAxis("Mouse X") * sensitivity;
+        _pitch = Input.GetAxis("Mouse Y") * sensitivity;
 
-        // Locks the angle
+        // Lock the angle
         _angle -= _pitch;
         _angle = Mathf.Clamp(_angle, -90f, 90f);
 

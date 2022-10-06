@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class PlayerShooting : MonoBehaviour
@@ -18,12 +16,10 @@ public sealed class PlayerShooting : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.IsGamePaused) 
-            return;
+        if (GameManager.IsGamePaused) return;
 
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Time.frameCount: " + Time.frameCount);
             InstantiateProjectile(ProjectileWeapon.Rocket, 0);
 
             return;
