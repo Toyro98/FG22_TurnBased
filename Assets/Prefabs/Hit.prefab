@@ -101,8 +101,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4579773579264554472}
-  - component: {fileID: 1060156469243070683}
   - component: {fileID: 5812832687893777472}
+  - component: {fileID: 2125547913547867949}
   m_Layer: 0
   m_Name: Hit
   m_TagString: Untagged
@@ -126,23 +126,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1060156469243070683
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1410835541164213432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ca5d6905c491fa4bb22a4bbc3ccca4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
-  cameraLookAt: {fileID: 0}
-  animator: {fileID: 5812832687893777472}
-  canvas: {fileID: 5346941649846114508}
-  healthText: {fileID: 7450572281449233184}
 --- !u!95 &5812832687893777472
 Animator:
   serializedVersion: 4
@@ -163,6 +146,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2125547913547867949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410835541164213432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ca5d6905c491fa4bb22a4bbc3ccca4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  cameraLookAt: {fileID: 0}
+  animator: {fileID: 5812832687893777472}
+  canvas: {fileID: 5346941649846114508}
+  healthText: {fileID: 7450572281449233184}
 --- !u!1 &1993397770369778703
 GameObject:
   m_ObjectHideFlags: 0
