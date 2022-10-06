@@ -102,7 +102,7 @@ public sealed class UIManger : MonoBehaviour
         else if (state == GameState.Wait)
         {
             StopCoroutine(_coroutine);
-            StartCoroutine(StartPlayerSwitchTimer());
+            _coroutine = StartCoroutine(StartPlayerSwitchTimer());
         }
     }
 
@@ -164,6 +164,5 @@ public sealed class UIManger : MonoBehaviour
         }
 
         _playerSwitchScreen.SetActive(false);
-        StopCoroutine(StartPlayerSwitchTimer());
     }
 }

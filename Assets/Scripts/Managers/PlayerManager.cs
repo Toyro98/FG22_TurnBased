@@ -14,6 +14,8 @@ public sealed class PlayerManager : MonoBehaviour
     [SerializeField] private List<Transform> _possibleSpawnLocations;
     [SerializeField] private List<Transform> _spawnedLocations = new List<Transform>();
 
+    private GameState _state;
+
     private void OnEnable()
     {
         GameManager.OnGameStateChange += GameStateChange;
@@ -26,6 +28,7 @@ public sealed class PlayerManager : MonoBehaviour
 
     private void GameStateChange(GameState state)
     {
+        _state = state;
         _playerShooting.enabled = state == GameState.PlayerTurn;
 
         if (state == GameState.PlayerSwitch)
@@ -121,7 +124,7 @@ public sealed class PlayerManager : MonoBehaviour
         _playerList[index] = null;
 
         // If the active player went out of bounds, wait 5 seconds before switching player
-        if (activePlayerIndex == index)
+        if (activePlayerIndex == index && _state != GameState.Wait)
         {
             GameManager.Instance.UpdateGameState(GameState.Wait);
         }
