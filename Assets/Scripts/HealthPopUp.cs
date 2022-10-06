@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public sealed class HealthPopUp : MonoBehaviour
 {
     public int damage; 
     public Camera cameraLookAt;
