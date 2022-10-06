@@ -12,13 +12,18 @@ public class LevelManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(1);
         Time.timeScale = 1f;
         GameManager.IsGamePaused = false;
     }
 
     public void StartLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(1);
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene(2);
     }
 }

@@ -10,7 +10,6 @@ public sealed class UIManger : MonoBehaviour
     [SerializeField] private PlayerManager _playerManager;
     [SerializeField] private GameObject _crosshair;
     [SerializeField] private GameObject _pauseScreen;
-    [SerializeField] private GameObject _gameoverScreen;
 
     [SerializeField] private GameObject _gameTimerScreen;
     [SerializeField] private TMP_Text _gameTimer;
@@ -38,7 +37,7 @@ public sealed class UIManger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !_gameoverScreen.activeInHierarchy)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (GameManager.IsGamePaused)
             {
@@ -93,7 +92,6 @@ public sealed class UIManger : MonoBehaviour
         _playerTimerScreen.SetActive(state == GameState.PlayerTurn);
         _playerChargeScreen.SetActive(false);
         _crosshair.SetActive(state == GameState.PlayerTurn);
-        _gameoverScreen.SetActive(state == GameState.GameOver);
 
         if (state == GameState.Start)
         {
@@ -105,10 +103,6 @@ public sealed class UIManger : MonoBehaviour
             _playerName.text = _playerManager.GetActivePlayerName();
             _playerHealth.text = _playerManager.GetActivePlayerHealth();
             _coroutine = StartCoroutine(StartPlayerTimer());
-        }
-        else if (state == GameState.GameOver)
-        {
-            StopAllCoroutines();
         }
         else if (state == GameState.Wait)
         {

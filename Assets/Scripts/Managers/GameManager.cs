@@ -13,6 +13,7 @@ public sealed class GameManager : MonoBehaviour
     public GameSettings GameSettings { get; private set; }
    
     [SerializeField] private PlayerManager _playerManager;
+    [SerializeField] private LevelManager _levelManager;
 
     private void Awake()
     {
@@ -73,8 +74,8 @@ public sealed class GameManager : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-     
-        Debug.Log("<< Game Over >>");
+
+        _levelManager.GameOver();
     }
 
     private IEnumerator Wait()

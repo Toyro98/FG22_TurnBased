@@ -19,10 +19,10 @@ public sealed class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.IsGamePaused) 
-            return;
-
-        Movement();
+        if (!GameManager.IsGamePaused)
+        {
+            Movement();
+        }
     }
 
     private void Movement()
@@ -45,7 +45,7 @@ public sealed class PlayerMovement : MonoBehaviour
             _controller.Move(_velocity * Time.deltaTime);
 
             // Jumping
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            if (Input.GetButtonDown("Jump") && isGrounded)
             {
                 _velocity.y = Mathf.Sqrt(jumpHeight * -2f * GRAVITY);
             }

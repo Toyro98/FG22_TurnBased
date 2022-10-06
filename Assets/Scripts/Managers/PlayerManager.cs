@@ -4,10 +4,8 @@ using UnityEngine;
 public sealed class PlayerManager : MonoBehaviour
 {
     [SerializeField] private UIManger _uiManger;
-    [SerializeField] private Projectile _rocketPrefab;
-    [SerializeField] private Projectile _grenadePrefab;
     [SerializeField] private Player _playerPrefab;
-    [SerializeField] private Health _healthPrefab;
+    [SerializeField] private HealthPopUp _healthPrefab;
     [SerializeField] private PlayerShooting _playerShooting;
     [SerializeField] private List<Player> _playerList;
     [SerializeField] private List<Transform> _possibleSpawnLocations;
@@ -111,7 +109,7 @@ public sealed class PlayerManager : MonoBehaviour
 
     public void DisplayHitDamage(int amount, Transform player)
     {
-        Health health = Instantiate(_healthPrefab, player.transform.position, _playerList[activePlayerIndex].playerCamera.transform.rotation, player.transform);
+        HealthPopUp health = Instantiate(_healthPrefab, player.transform.position, _playerList[activePlayerIndex].playerCamera.transform.rotation, player.transform);
 
         health.cameraLookAt = activeCamera;
         health.damage = amount;
@@ -120,6 +118,11 @@ public sealed class PlayerManager : MonoBehaviour
     public void RemovePlayer(int index)
     {
         _playerList[index] = null;
+
+        if (activePlayerIndex == index)
+        {
+            GameManager.Instance.UpdateGameState(GameState.Wait);
+        }
     }
 
     public void CheckIfPlayersAreAlive()
@@ -133,8 +136,6 @@ public sealed class PlayerManager : MonoBehaviour
                 playersAlive++;
             }
         }
-
-        Debug.Log("players alive " + playersAlive);
 
         if (playersAlive > 1)
         {
