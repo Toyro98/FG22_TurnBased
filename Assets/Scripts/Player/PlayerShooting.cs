@@ -40,7 +40,7 @@ public sealed class PlayerShooting : MonoBehaviour
 
         if (Input.GetMouseButtonUp(1))
         {
-            InstantiateProjectile(ProjectileWeapon.Granade, _charge);
+            InstantiateProjectile(ProjectileWeapon.Grenade, _charge);
         }
     }
 

@@ -13,7 +13,7 @@ public sealed class Projectile : MonoBehaviour
     {
         _damage = Random.Range(5, 16);
 
-        if (projectile == ProjectileWeapon.Granade)
+        if (projectile == ProjectileWeapon.Grenade)
         {
             _damage *= 2;
             _rigidbody.AddForce(charge * 2f * transform.forward, ForceMode.VelocityChange);
@@ -49,5 +49,5 @@ public sealed class Projectile : MonoBehaviour
 public enum ProjectileWeapon
 {
     Rocket,
-    Granade
+    Grenade
 }
