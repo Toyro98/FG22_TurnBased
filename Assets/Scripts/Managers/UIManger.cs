@@ -60,6 +60,11 @@ public sealed class UIManger : MonoBehaviour
         _playerCharge.value = value;
     }
 
+    public void ResumeGame()
+    {
+        ActivatePauseMenu(false);
+    }
+
     private void ActivatePauseMenu(bool status)
     {
         _pauseScreen.SetActive(status);
@@ -153,7 +158,7 @@ public sealed class UIManger : MonoBehaviour
         while (time > 0)
         {
             time--;
-            _playerSwitch.text = string.Format("Switching In {0}", time);
+            _playerSwitch.text = "Switching In " + time;
 
             yield return _delay;
         }
