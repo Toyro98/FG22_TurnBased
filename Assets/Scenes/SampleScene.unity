@@ -9952,8 +9952,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0358f60c41c6925488d0b1b0f5d8c643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rocketPrefab: {fileID: 4965021274260293745, guid: 6026892448e1cf44b87f410a960ef155, type: 3}
-  _grenadePrefab: {fileID: 2592001765630571712, guid: 72eee6c1e158ba743b9bdc807a771712, type: 3}
+  _rocketPrefab: {fileID: 7455469779177582580, guid: 6026892448e1cf44b87f410a960ef155, type: 3}
+  _grenadePrefab: {fileID: 7455469779177582580, guid: 523dbf9a28ce1d24e8e1e939d948268d, type: 3}
   _playerManager: {fileID: 679066459}
   _uiManager: {fileID: 1608869153}
 --- !u!1 &681567988
